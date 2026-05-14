@@ -1,5 +1,10 @@
 ﻿using CarFactory;
 
-App app = new App();
-
-app.RunApp();
+internal class Program
+{
+    private static void Main()
+    {
+        App app = new App();
+        app.RunApp();
+    }
+}
