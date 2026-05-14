@@ -1,4 +1,8 @@
-﻿internal class NoArmor : IArmor
+﻿namespace FighterGame.Model.Armors
 {
-    public int Armor { get; } = 0;
+    internal class NoArmor : IArmor
+    {
+        public string Name { get; } = "Без брони";
+        public int Armor { get; } = 0;
+    }
 }

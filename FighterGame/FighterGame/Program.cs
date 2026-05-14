@@ -1,6 +1,11 @@
-﻿App app = new App();
-
-while ( true )
+﻿namespace FighterGame
 {
-    app.RunApp();
+    internal class Program
+    {
+        private static void Main()
+        {
+            App app = new App();
+            app.RunApp();
+        }
+    }
 }

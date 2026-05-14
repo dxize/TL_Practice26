@@ -1,6 +1,10 @@
-﻿internal interface IRace
+﻿namespace FighterGame.Model.Races
 {
-    int Damage { get; }
-    int Health { get; }
-    int Armor { get; }
+    internal interface IRace
+    {
+        string Name { get; }
+        int Damage { get; }
+        int Health { get; }
+        int Armor { get; }
+    }
 }

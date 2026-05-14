@@ -1,4 +1,8 @@
-﻿internal interface IWeapon
+﻿namespace FighterGame.Model.Weapons
 {
-    int Damage { get; }
+    internal interface IWeapon
+    {
+        string Name { get; }
+        int Damage { get; }
+    }
 }

@@ -1,4 +1,8 @@
-﻿internal class SpearWeapon : IWeapon
+﻿namespace FighterGame.Model.Weapons
 {
-    public int Damage { get; } = 15;
+    internal class SpearWeapon : IWeapon
+    {
+        public string Name { get; } = "Копьё";
+        public int Damage { get; } = 15;
+    }
 }

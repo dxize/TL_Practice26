@@ -1,51 +1,50 @@
-﻿internal class Fighter : IFighter
+﻿using FighterGame.Model.Armors;
+using FighterGame.Model.Classes;
+using FighterGame.Model.Races;
+using FighterGame.Model.Weapons;
+using FighterGame.Utilities;
+
+namespace FighterGame.Model
 {
-    private int m_health;
-
-    private IRace m_race;
-    private IClass m_classType;
-    private IWeapon m_weapon;
-    private IArmor m_armor;
-
-    public string Name { get; private set; }
-    public int Initiative { get; private set; }
-
-    public Fighter( string name, IRace race, IClass @class, IWeapon weapon, IArmor armor )
+    internal class Fighter : IFighter
     {
-        Name = name;
-        m_race = race;
-        m_classType = @class;
-        m_weapon = weapon;
-        m_armor = armor;
+        private int _health;
 
-        m_health = m_race.Health + m_classType.Health;
+        private IRace _race;
+        private IClass _classType;
+        private IWeapon _weapon;
+        private IArmor _armor;
 
-        Initiative = new Random().Next( 1, 21 );
-    }
+        public string Name { get; private set; }
+        public int Initiative { get; private set; }
 
-    public bool IsAlive => m_health > 0;
-    public int Health => m_health;
-    public int FullDamage => m_race.Damage + m_classType.Damage + m_weapon.Damage;
-    public int FullArmor => m_race.Armor + m_classType.Armor + m_armor.Armor;
-
-    public void SetArmor( IArmor armor )
-    {
-        m_armor = armor;
-    }
-
-    public void SetWeapon( IWeapon weapon )
-    {
-        m_weapon = weapon;
-    }
-
-    public void TakeDamage( int damage )
-    {
-        int newHealth = m_health - damage;
-        if ( newHealth < 0 )
+        public Fighter( string name, IRace race, IClass @class, IWeapon weapon, IArmor armor )
         {
-            newHealth = 0;
+            Name = name;
+            _race = race;
+            _classType = @class;
+            _weapon = weapon;
+            _armor = armor;
+
+            _health = _race.Health + _classType.Health;
+
+            Initiative = Randomizer.GetInt( 1, 21 );
         }
 
-        m_health = newHealth;
+        public bool IsAlive => _health > 0;
+        public int Health => _health;
+        public int FullDamage => _race.Damage + _classType.Damage + _weapon.Damage;
+        public int FullArmor => _race.Armor + _classType.Armor + _armor.Armor;
+
+        public void TakeDamage( int damage )
+        {
+            int newHealth = _health - damage;
+            if ( newHealth < 0 )
+            {
+                newHealth = 0;
+            }
+
+            _health = newHealth;
+        }
     }
 }

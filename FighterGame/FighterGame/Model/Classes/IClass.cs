@@ -1,6 +1,10 @@
-﻿internal interface IClass
+﻿namespace FighterGame.Model.Classes
 {
-    int Damage { get; }
-    int Health { get; }
-    int Armor { get; }
+    internal interface IClass
+    {
+        string Name { get; }
+        int Damage { get; }
+        int Health { get; }
+        int Armor { get; }
+    }
 }

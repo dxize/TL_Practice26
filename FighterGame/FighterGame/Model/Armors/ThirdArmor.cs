@@ -1,4 +1,8 @@
-﻿internal class ThirdArmor : IArmor
+﻿namespace FighterGame.Model.Armors
 {
-    public int Armor { get; } = 6;
+    internal class ThirdArmor : IArmor
+    {
+        public string Name { get; } = "Тяжёлая броня";
+        public int Armor { get; } = 6;
+    }
 }

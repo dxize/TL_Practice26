@@ -1,4 +1,8 @@
-﻿internal class SwordWeapon : IWeapon
+﻿namespace FighterGame.Model.Weapons
 {
-    public int Damage { get; } = 10;
+    internal class SwordWeapon : IWeapon
+    {
+        public string Name { get; } = "Меч";
+        public int Damage { get; } = 10;
+    }
 }
