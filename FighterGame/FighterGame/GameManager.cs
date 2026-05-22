@@ -5,7 +5,7 @@ namespace FighterGame;
 
 internal class GameManager
 {
-    private List<IFighter> _fighters;
+    private List<IFighter> _fighters = [];
 
     public GameManager( List<IFighter> fighters )
     {
@@ -14,7 +14,7 @@ internal class GameManager
 
     public void StartBattle()
     {
-        if ( _fighters == null || _fighters.Count <= 1 )
+        if ( _fighters.Count <= 1 )
         {
             return;
         }
