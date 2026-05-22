@@ -1,11 +1,10 @@
-﻿namespace FighterGame
+﻿namespace FighterGame;
+
+internal class Program
 {
-    class Program
+    private static void Main()
     {
-        private static void Main()
-        {
-            App app = new App();
-            app.RunApp();
-        }
+        App app = new App();
+        app.RunApp();
     }
 }

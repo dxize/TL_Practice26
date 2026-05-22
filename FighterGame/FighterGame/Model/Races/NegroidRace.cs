@@ -1,10 +1,9 @@
-﻿namespace FighterGame.Model.Races
+﻿namespace FighterGame.Model.Races;
+
+internal class NegroidRace : IRace
 {
-    internal class NegroidRace : IRace
-    {
-        public string Name { get; } = "Негроид";
-        public int Damage { get; } = 12;
-        public int Health { get; } = 110;
-        public int Armor { get; } = 1;
-    }
+    public string Name { get; } = "Негроид";
+    public int Damage { get; } = 12;
+    public int Health { get; } = 110;
+    public int Armor { get; } = 1;
 }
