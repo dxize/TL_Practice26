@@ -1,116 +1,115 @@
-﻿namespace OrderManager
+﻿namespace OrderManager;
+
+internal class OrderApp
 {
-    internal class OrderApp
+    public void Run()
     {
-        public void Run()
+        while ( true )
         {
-            while ( true )
+            Order? order = ReadOrder();
+
+            if ( order == null )
             {
-                Order? order = ReadOrder();
-
-                if ( order == null )
-                {
-                    continue;
-                }
-
-                if ( !IsOrderConfirmed( order ) )
-                {
-                    continue;
-                }
-
-                PrintSuccessMessage( order );
-
-                if ( !ShouldContinueShopping() )
-                {
-                    Console.WriteLine( "До новых встреч!" );
-                    break;
-                }
-
-                Console.WriteLine();
+                continue;
             }
-        }
 
-        private Order? ReadOrder()
-        {
-            string productName = ReadRequiredString( "Введите название товара: " );
-            int amount = ReadPositiveInt( "Введите количество товара: " );
-            string userName = ReadRequiredString( "Введите имя пользователя: " );
-            string address = ReadRequiredString( "Введите адрес доставки: " );
-
-            return new Order(
-                productName,
-                amount,
-                userName,
-                address,
-                DateTime.Today.AddDays( 3 ) );
-        }
-
-        string ReadRequiredString( string message )
-        {
-            while ( true )
+            if ( !IsOrderConfirmed( order ) )
             {
-                Console.Write( message );
-
-                string? value = Console.ReadLine();
-
-                if ( !string.IsNullOrWhiteSpace( value ) )
-                {
-                    return value.Trim();
-                }
-
-                Console.WriteLine( "Значение не должно быть пустым.\n" );
+                continue;
             }
-        }
 
-        int ReadPositiveInt( string message )
-        {
-            while ( true )
+            PrintSuccessMessage( order );
+
+            if ( !ShouldContinueShopping() )
             {
-                Console.Write( message );
-
-                string? value = Console.ReadLine();
-
-                if ( int.TryParse( value, out int number ) && number > 0 )
-                {
-                    return number;
-                }
-
-                Console.WriteLine( "Введите положительное целое число.\n" );
+                Console.WriteLine( "До новых встреч!" );
+                break;
             }
-        }
-
-        private bool IsOrderConfirmed( Order order )
-        {
-            Console.WriteLine(
-                $"Здравствуйте, {order.UserName}, вы заказали {order.Amount} {order.ProductName} " +
-                $"на адрес {order.Address}, все верно? (Да, Нет)" );
-
-            string? answer = Console.ReadLine();
 
             Console.WriteLine();
-
-            return IsYesAnswer( answer );
         }
+    }
 
-        private void PrintSuccessMessage( Order order )
+    private Order? ReadOrder()
+    {
+        string productName = ReadRequiredString( "Введите название товара: " );
+        int amount = ReadPositiveInt( "Введите количество товара: " );
+        string userName = ReadRequiredString( "Введите имя пользователя: " );
+        string address = ReadRequiredString( "Введите адрес доставки: " );
+
+        return new Order(
+            productName,
+            amount,
+            userName,
+            address,
+            DateTime.Today.AddDays( 3 ) );
+    }
+
+    string ReadRequiredString( string message )
+    {
+        while ( true )
         {
-            Console.WriteLine(
-                $"{order.UserName}! Ваш заказ {order.ProductName} в количестве {order.Amount} оформлен! " +
-                $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate:dd.MM.yyyy}\n" );
-        }
+            Console.Write( message );
 
-        private bool ShouldContinueShopping()
+            string? value = Console.ReadLine();
+
+            if ( !string.IsNullOrWhiteSpace( value ) )
+            {
+                return value.Trim();
+            }
+
+            Console.WriteLine( "Значение не должно быть пустым.\n" );
+        }
+    }
+
+    int ReadPositiveInt( string message )
+    {
+        while ( true )
         {
-            Console.WriteLine( "Хотите ли вы продолжить покупки? (Да, Нет)" );
+            Console.Write( message );
 
-            string? answer = Console.ReadLine();
+            string? value = Console.ReadLine();
 
-            return IsYesAnswer( answer );
+            if ( int.TryParse( value, out int number ) && number > 0 )
+            {
+                return number;
+            }
+
+            Console.WriteLine( "Введите положительное целое число.\n" );
         }
+    }
 
-        private bool IsYesAnswer( string? answer )
-        {
-            return answer != null && answer.Trim().ToLower() == "да";
-        }
+    private bool IsOrderConfirmed( Order order )
+    {
+        Console.WriteLine(
+            $"Здравствуйте, {order.UserName}, вы заказали {order.Amount} {order.ProductName} " +
+            $"на адрес {order.Address}, все верно? (Да, Нет)" );
+
+        string? answer = Console.ReadLine();
+
+        Console.WriteLine();
+
+        return IsYesAnswer( answer );
+    }
+
+    private void PrintSuccessMessage( Order order )
+    {
+        Console.WriteLine(
+            $"{order.UserName}! Ваш заказ {order.ProductName} в количестве {order.Amount} оформлен! " +
+            $"Ожидайте доставку по адресу {order.Address} к {order.DeliveryDate:dd.MM.yyyy}\n" );
+    }
+
+    private bool ShouldContinueShopping()
+    {
+        Console.WriteLine( "Хотите ли вы продолжить покупки? (Да, Нет)" );
+
+        string? answer = Console.ReadLine();
+
+        return IsYesAnswer( answer );
+    }
+
+    private bool IsYesAnswer( string? answer )
+    {
+        return answer != null && answer.Trim().ToLower() == "да";
     }
 }
