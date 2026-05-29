@@ -1,0 +1,53 @@
+.container {
+    width: 50%;
+    height: 32px;
+    display: flex;
+    margin: clamp(12px, 2vw ,20px) auto 0 auto;
+    border-radius: 6px;
+    border: 1px solid #D9D9D9;
+}
+
+.container__input {
+    width: 15%;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    font-family: Inter; 
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: 0;
+}
+
+.container__input:focus {
+    outline: none;
+}
+
+.container__separator {
+    width: 0px;
+    height: 60%;
+    margin: auto 0;
+    border: 1px solid #D9D9D9;
+}
+
+.container__currency-name {
+    margin: auto 0px auto 30px;
+    font-family: Inter; 
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0;
+}
+
+.container__button {
+    width: 5%;
+    height: 70%;
+    display: flex;
+    align-items: center;     
+    justify-content: center;  
+    margin: auto clamp(12px, 2vw, 25px) auto auto;
+    background-color: transparent;
+    border: none;   
+    opacity: 1;
+    cursor: pointer;
+}

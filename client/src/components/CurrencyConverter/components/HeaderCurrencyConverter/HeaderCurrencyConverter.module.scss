@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: clamp(16px, 3vw, 29px); 
+}
+
+.header__label {
+    font-family: Inter; 
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #767676;
+}
+
+.header__rate {
+    font-family: Inter; 
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #000000;
+}
+
+.header__date {
+    font-family: Inter; 
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: clamp(12px, 2vw, 19px);
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #767676;
+}
