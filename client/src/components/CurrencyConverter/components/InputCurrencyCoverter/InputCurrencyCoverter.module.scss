@@ -30,7 +30,16 @@
     border: 1px solid #D9D9D9;
 }
 
-.container__currency-name {
+.container__button {
+    width: 100%;
+    display: flex;
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.container__button__currency-name {
     margin: auto 0px auto 30px;
     font-family: Inter; 
     font-weight: 400;
@@ -39,8 +48,8 @@
     letter-spacing: 0;
 }
 
-.container__button {
-    width: 5%;
+.container__button__icon {
+    width: 3%;
     height: 70%;
     display: flex;
     align-items: center;     
@@ -49,5 +58,10 @@
     background-color: transparent;
     border: none;   
     opacity: 1;
-    cursor: pointer;
+    transition: transform 0.25s ease;
 }
+
+.container__button__icon-active {
+    transform: rotate(180deg);
+}
+
