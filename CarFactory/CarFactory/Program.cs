@@ -4,7 +4,7 @@ class Program
 {
     private static void Main()
     {
-        App app = new App();
+        App app = new();
         app.RunApp();
     }
 }
