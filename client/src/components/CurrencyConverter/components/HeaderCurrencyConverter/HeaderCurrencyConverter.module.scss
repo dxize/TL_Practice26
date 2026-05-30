@@ -3,33 +3,35 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: clamp(16px, 3vw, 29px); 
+
+    margin-block-start: clamp(16px, 3vw, 29px); 
 }
 
 .header__label {
-    font-family: Inter; 
+    color: #767676;
+    font-family: Inter;
+    font-size: 16px; 
     font-weight: 400;
-    font-size: 16px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #767676;
 }
 
 .header__rate {
-    font-family: Inter; 
+    color: #000;
+    font-family: Inter;
+    font-size: 40px; 
     font-weight: 400;
-    font-size: 40px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #000000;
 }
 
 .header__date {
-    font-family: Inter; 
+    margin-block-start: clamp(12px, 2vw, 19px);
+
+    color: #767676;
+    font-family: Inter;
+    font-size: 14px; 
     font-weight: 400;
-    font-size: 14px;
-    margin-top: clamp(12px, 2vw, 19px);
     line-height: 100%;
     letter-spacing: 0;
-    color: #767676;
 }

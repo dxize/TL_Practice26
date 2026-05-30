@@ -1,6 +1,6 @@
 import styles from './HeaderCurrencyConverter.module.scss';
 
-function HeaderCurrencyConverter() {
+export const HeaderCurrencyConverter = () => {
     return (
         <div className={styles.header}>
             <div className={styles.headerLabel}>1 Polish zloty is</div>
@@ -9,5 +9,3 @@ function HeaderCurrencyConverter() {
         </div>
     )
 }
-
-export default HeaderCurrencyConverter;

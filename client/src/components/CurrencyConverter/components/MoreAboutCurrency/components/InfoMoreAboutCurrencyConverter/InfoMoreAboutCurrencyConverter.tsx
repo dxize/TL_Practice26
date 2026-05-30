@@ -4,7 +4,7 @@ type InfoMoreAboutCurrencyConverterProps = {
     currencyName: string;
 };
 
-function InfoMoreAboutCurrencyConverter({currencyName} : InfoMoreAboutCurrencyConverterProps) {
+export const InfoMoreAboutCurrencyConverter = ({currencyName} : InfoMoreAboutCurrencyConverterProps) => {
     
     let title = "";
     let subTitle = ""; 
@@ -25,5 +25,3 @@ function InfoMoreAboutCurrencyConverter({currencyName} : InfoMoreAboutCurrencyCo
         </div>
     )
 }
-
-export default InfoMoreAboutCurrencyConverter;

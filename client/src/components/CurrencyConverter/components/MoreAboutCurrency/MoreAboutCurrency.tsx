@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./MoreAboutCurrency.module.scss"
-import InfoMoreAboutCurrencyConverter from "./components/InfoMoreAboutCurrencyConverter/InfoMoreAboutCurrencyConverter";
+import {InfoMoreAboutCurrencyConverter} from "./components/InfoMoreAboutCurrencyConverter/InfoMoreAboutCurrencyConverter";
 
-function MoreAboutCurrency() {
+export const MoreAboutCurrency = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
@@ -26,5 +26,3 @@ function MoreAboutCurrency() {
         </div>
     )
 }
-
-export default MoreAboutCurrency;

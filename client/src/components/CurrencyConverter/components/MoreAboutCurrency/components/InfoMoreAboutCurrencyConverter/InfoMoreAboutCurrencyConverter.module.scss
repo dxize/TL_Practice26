@@ -3,22 +3,23 @@
 }
 
 .container__title {
+    color: #000;
     font-family: Inter;
-    font-weight: 700;
-    font-style: Bold;
     font-size: clamp(16px, 1.5vw, 26.14px);
+    font-weight: 700;
+    font-style: bold;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #000000;
 }
 
 .container__subtitle {
+    margin-block-start: 5px;
+
+    color: #767676;
     font-family: Inter;
-    font-weight: 400;
-    font-style: Regular;
     font-size: clamp(14px, 1.5vw, 21.24px);
+    font-weight: 400;
+    font-style: regular;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #767676;
-    margin-top: 5px;
 }

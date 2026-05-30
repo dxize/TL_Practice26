@@ -6,7 +6,7 @@ type InputCurrencyCoverterProps = {
     currencyRate: string;
 };
 
-function InputCurrencyCoverter({currencyName, currencyRate}: InputCurrencyCoverterProps) {
+export const InputCurrencyCoverter = ({currencyName, currencyRate}: InputCurrencyCoverterProps) => {
 
     const [value, setValue] = useState<string>(currencyRate);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -40,5 +40,3 @@ function InputCurrencyCoverter({currencyName, currencyRate}: InputCurrencyCovert
         </div>
     )
 }
-
-export default InputCurrencyCoverter;

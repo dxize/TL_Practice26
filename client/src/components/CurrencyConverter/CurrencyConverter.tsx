@@ -1,9 +1,9 @@
-import HeaderCurrencyConverter from "./components/HeaderCurrencyConverter/HeaderCurrencyConverter";
-import InputCurrencyCoverter from "./components/InputCurrencyCoverter/InputCurrencyCoverter";
-import MoreAboutCurrency from "./components/MoreAboutCurrency/MoreAboutCurrency";
+import { HeaderCurrencyConverter } from "./components/HeaderCurrencyConverter/HeaderCurrencyConverter";
+import { InputCurrencyCoverter } from "./components/InputCurrencyCoverter/InputCurrencyCoverter";
+import { MoreAboutCurrency } from "./components/MoreAboutCurrency/MoreAboutCurrency";
 import styles from "./CurrencyConverter.module.scss";
 
-function CurrencyConverter() {
+export const CurrencyConverter = () => {
     return (
         <div className={styles.currencyConverterBody}>
             <HeaderCurrencyConverter />
@@ -13,5 +13,3 @@ function CurrencyConverter() {
         </div>
     );
 }
-
-export default CurrencyConverter;

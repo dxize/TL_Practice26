@@ -1,13 +1,11 @@
 import './App.module.scss'
-import CurrencyConverter from './components/CurrencyConverter/CurrencyConverter'
+import {CurrencyConverter} from './components/CurrencyConverter/CurrencyConverter'
 import styles from './App.module.scss';
 
-function App() {
+export const App = () => {
   return (
     <div className={styles.app}>
       <CurrencyConverter/>
     </div>
   )
 }
-
-export default App
