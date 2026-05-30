@@ -55,7 +55,7 @@ internal class CarFactory
 
     }
 
-    private string AskName()
+    private static string AskName()
     {
         string name = string.Empty;
         bool isCorrectName = false;
@@ -76,7 +76,7 @@ internal class CarFactory
         return name;
     }
 
-    private T SelectOption<T>( List<T> options, Func<T, string> getName )
+    private static T SelectOption<T>( List<T> options, Func<T, string> getName )
     {
         for ( int i = 0; i < options.Count; i++ )
         {

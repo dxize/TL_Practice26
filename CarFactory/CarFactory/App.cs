@@ -24,16 +24,6 @@ internal class App
         }
     }
 
-
-    private void ShowStartMenu()
-    {
-        Console.WriteLine( """
-            [1] - Выбрать конфигурацию для новой машины
-            [2] - Посмотреть конфигурацию машин
-            [3] - Выйти
-            """ );
-    }
-
     private bool StartMenu()
     {
         int choice = GetInputFromUser( 1, 3 );
@@ -55,21 +45,6 @@ internal class App
         return true;
     }
 
-    private int GetInputFromUser( int min, int max )
-    {
-        while ( true )
-        {
-            string input = Console.ReadLine();
-
-            if ( int.TryParse( input, out int result ) && result >= min && result <= max )
-            {
-                return result;
-            }
-
-            Console.WriteLine( $"\nОшибка! Введите цифру от {min} до {max}:" );
-        }
-    }
-
     private void ShowInfoCars()
     {
         if ( _cars.Count == 0 )
@@ -81,6 +56,30 @@ internal class App
         foreach ( Car car in _cars )
         {
             car.Info();
+        }
+    }
+
+    private static void ShowStartMenu()
+    {
+        Console.WriteLine( """
+            [1] - Выбрать конфигурацию для новой машины
+            [2] - Посмотреть конфигурацию машин
+            [3] - Выйти
+            """ );
+    }
+
+    private static int GetInputFromUser( int min, int max )
+    {
+        while ( true )
+        {
+            string input = Console.ReadLine();
+
+            if ( int.TryParse( input, out int result ) && result >= min && result <= max )
+            {
+                return result;
+            }
+
+            Console.WriteLine( $"\nОшибка! Введите цифру от {min} до {max}:" );
         }
     }
 }
