@@ -5,12 +5,12 @@ namespace CarFactory;
 internal class App
 {
     private List<Car> _cars;
-    private CarFactory _creator;
+    private CarFactory _factory;
 
     public App()
     {
         _cars = [];
-        _creator = new CarFactory();
+        _factory = new CarFactory();
     }
 
     public void RunApp()
@@ -38,7 +38,7 @@ internal class App
 
         if ( choice == 1 )
         {
-            Car newCar = _creator.CreateCar();
+            Car newCar = _factory.CreateCar();
             _cars.Add( newCar );
         }
         else if ( choice == 2 )
