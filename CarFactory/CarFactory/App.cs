@@ -4,8 +4,8 @@ namespace CarFactory;
 
 internal class App
 {
-    private List<Car> _cars;
-    private CarFactory _factory;
+    private readonly List<Car> _cars;
+    private readonly CarFactory _factory;
 
     public App()
     {

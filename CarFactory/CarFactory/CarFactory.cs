@@ -7,23 +7,23 @@ namespace CarFactory;
 
 internal class CarFactory
 {
-    private List<ITransmission> _availableTransmissions = [
+    private readonly List<ITransmission> _availableTransmissions = [
         new AutomaticTransmission(),
         new ManualTransmission()
     ];
 
-    private List<ICarEngine> _availableEngines = [
+    private readonly List<ICarEngine> _availableEngines = [
         new DieselEngine(),
         new PetrolEngine()
     ];
 
-    private List<ICarBodyType> _availableCarBodyTypes = [
+    private readonly List<ICarBodyType> _availableCarBodyTypes = [
         new CoupeCarBodyType(),
         new SedanCarBodyType(),
         new TruckCarBodyType()
     ];
 
-    private List<string> _availableColors = [
+    private readonly List<string> _availableColors = [
         "Синий",
         "Белый",
         "Черный",

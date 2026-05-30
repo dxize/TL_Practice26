@@ -6,13 +6,13 @@ namespace CarFactory.Model;
 
 internal class Car
 {
-    private string _name;
-    private string _carBodyTypeName;
-    private string _carColor;
-    private string _transmissionName;
-    private int _gearCount;
-    private string _carEngineName;
-    private int _maxSpeed;
+    private readonly string _name;
+    private readonly string _carBodyTypeName;
+    private readonly string _carColor;
+    private readonly string _transmissionName;
+    private readonly int _gearCount;
+    private readonly string _carEngineName;
+    private readonly int _maxSpeed;
 
     public Car( string name, ICarBodyType body, string color,
         ITransmission transmission, ICarEngine engine )
