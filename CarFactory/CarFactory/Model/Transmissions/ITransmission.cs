@@ -1,8 +1,7 @@
-﻿namespace CarFactory.Model.Transmissions
+﻿namespace CarFactory.Model.Transmissions;
+
+internal interface ITransmission
 {
-    internal interface ITransmission
-    {
-        string Name { get; }
-        int GearCount { get; }
-    }
+    string Name { get; }
+    int GearCount { get; }
 }

@@ -1,8 +1,7 @@
-﻿namespace CarFactory.Model.CarBodyTypes
+﻿namespace CarFactory.Model.CarBodyTypes;
+
+internal class CoupeCarBodyType : ICarBodyType
 {
-    internal class CoupeCarBodyType : ICarBodyType
-    {
-        public string Name => "Купе";
-        public int SpeedModifier => 3;
-    }
+    public string Name => "Купе";
+    public int SpeedModifier => 3;
 }

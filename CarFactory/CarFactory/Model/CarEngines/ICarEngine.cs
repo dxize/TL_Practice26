@@ -1,8 +1,7 @@
-﻿namespace CarFactory.Model.CarEngines
+﻿namespace CarFactory.Model.CarEngines;
+
+internal interface ICarEngine
 {
-    internal interface ICarEngine
-    {
-        string Name { get; }
-        int BaseMaxSpeed { get; }
-    }
+    string Name { get; }
+    int BaseMaxSpeed { get; }
 }

@@ -3,97 +3,96 @@ using CarFactory.Model.CarBodyTypes;
 using CarFactory.Model.CarEngines;
 using CarFactory.Model.Transmissions;
 
-namespace CarFactory
+namespace CarFactory;
+
+internal class CarFactory
 {
-    internal class CarFactory
+    private List<ITransmission> _availableTransmission = [
+        new AutomaticTransmission(),
+        new ManualTransmission()
+    ];
+
+    private List<ICarEngine> _availableEngine = [
+        new DieselEngine(),
+        new PetrolEngine()
+    ];
+
+    private List<ICarBodyType> _availableCarBodyType = [
+        new CoupeCarBodyType(),
+        new SedanCarBodyType(),
+        new TruckCarBodyType()
+    ];
+
+    private List<string> _availableColor = [
+        "Синий",
+        "Белый",
+        "Черный",
+        "Серый",
+        "Желтый"
+    ];
+
+    public Car CreateCar()
     {
-        private List<ITransmission> _availableTransmission = [
-            new AutomaticTransmission(),
-            new ManualTransmission()
-        ];
+        Console.WriteLine( "\n=== Создание нового автомобиля ===" );
 
-        private List<ICarEngine> _availableEngine = [
-            new DieselEngine(),
-            new PetrolEngine()
-        ];
+        string name = AskName();
 
-        private List<ICarBodyType> _availableCarBodyType = [
-            new CoupeCarBodyType(),
-            new SedanCarBodyType(),
-            new TruckCarBodyType()
-        ];
+        Console.WriteLine( "Выберите кузов из списка ниже:" );
+        ICarBodyType selectedCarBodyType = SelectOption( _availableCarBodyType, x => x.Name );
 
-        private List<string> _availableColor = [
-            "Синий",
-            "Белый",
-            "Черный",
-            "Серый",
-            "Желтый"
-        ];
+        Console.WriteLine( "\nВыберите цвет списка ниже:" );
+        string selectedColor = SelectOption( _availableColor, x => x );
 
-        public Car CreateCar()
+        Console.WriteLine( "\nВыберите тип коробки передач из списка ниже:" );
+        ITransmission selectedTransmission = SelectOption( _availableTransmission, x => x.Name );
+
+        Console.WriteLine( "\nВыберите тип двигателя из списка ниже:" );
+        ICarEngine selectedEngine = SelectOption( _availableEngine, x => x.Name );
+
+        Console.WriteLine( $"\nАвтомобиль {name} успешно добавлен!\n" );
+
+        return new Car( name, selectedCarBodyType, selectedColor, selectedTransmission, selectedEngine );
+
+    }
+
+    private string AskName()
+    {
+        string name = string.Empty;
+        bool isCorrectName = false;
+        while ( !isCorrectName )
         {
-            Console.WriteLine( "\n=== Создание нового автомобиля ===" );
+            Console.Write( "Введите марку авто: " );
+            name = Console.ReadLine();
+            Console.WriteLine();
+            if ( string.IsNullOrWhiteSpace( name ) )
+            {
+                Console.WriteLine( "Название не может быть пустым\n" );
+                continue;
+            }
 
-            string name = AskName();
-
-            Console.WriteLine( "Выберите кузов из списка ниже:" );
-            ICarBodyType selectedCarBodyType = SelectOption( _availableCarBodyType, x => x.Name );
-
-            Console.WriteLine( "\nВыберите цвет списка ниже:" );
-            string selectedColor = SelectOption( _availableColor, x => x );
-
-            Console.WriteLine( "\nВыберите тип коробки передач из списка ниже:" );
-            ITransmission selectedTransmission = SelectOption( _availableTransmission, x => x.Name );
-
-            Console.WriteLine( "\nВыберите тип двигателя из списка ниже:" );
-            ICarEngine selectedEngine = SelectOption( _availableEngine, x => x.Name );
-
-            Console.WriteLine( $"\nАвтомобиль {name} успешно добавлен!\n" );
-
-            return new Car( name, selectedCarBodyType, selectedColor, selectedTransmission, selectedEngine );
-
+            isCorrectName = true;
         }
 
-        private string AskName()
+        return name;
+    }
+
+    private T SelectOption<T>( List<T> options, Func<T, string> getName )
+    {
+        for ( int i = 0; i < options.Count; i++ )
         {
-            string name = string.Empty;
-            bool isCorrectName = false;
-            while ( !isCorrectName )
-            {
-                Console.Write( "Введите марку авто: " );
-                name = Console.ReadLine();
-                Console.WriteLine();
-                if ( string.IsNullOrWhiteSpace( name ) )
-                {
-                    Console.WriteLine( "Название не может быть пустым\n" );
-                    continue;
-                }
-
-                isCorrectName = true;
-            }
-
-            return name;
+            Console.WriteLine( $"{i + 1} - {getName( options[ i ] )}" );
         }
 
-        private T SelectOption<T>( List<T> options, Func<T, string> getName )
+        while ( true )
         {
-            for ( int i = 0; i < options.Count; i++ )
+            string input = Console.ReadLine();
+
+            if ( int.TryParse( input, out int choice ) && choice >= 1 && choice <= options.Count )
             {
-                Console.WriteLine( $"{i + 1} - {getName( options[ i ] )}" );
+                return options[ choice - 1 ];
             }
 
-            while ( true )
-            {
-                string input = Console.ReadLine();
-
-                if ( int.TryParse( input, out int choice ) && choice >= 1 && choice <= options.Count )
-                {
-                    return options[ choice - 1 ];
-                }
-
-                Console.WriteLine( "\nОшибка! Введите корректную цифру из списка." );
-            }
+            Console.WriteLine( "\nОшибка! Введите корректную цифру из списка." );
         }
     }
 }
