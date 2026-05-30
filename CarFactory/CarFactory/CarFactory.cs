@@ -7,23 +7,23 @@ namespace CarFactory;
 
 internal class CarFactory
 {
-    private List<ITransmission> _availableTransmission = [
+    private List<ITransmission> _availableTransmissions = [
         new AutomaticTransmission(),
         new ManualTransmission()
     ];
 
-    private List<ICarEngine> _availableEngine = [
+    private List<ICarEngine> _availableEngines = [
         new DieselEngine(),
         new PetrolEngine()
     ];
 
-    private List<ICarBodyType> _availableCarBodyType = [
+    private List<ICarBodyType> _availableCarBodyTypes = [
         new CoupeCarBodyType(),
         new SedanCarBodyType(),
         new TruckCarBodyType()
     ];
 
-    private List<string> _availableColor = [
+    private List<string> _availableColors = [
         "Синий",
         "Белый",
         "Черный",
@@ -38,16 +38,16 @@ internal class CarFactory
         string name = AskName();
 
         Console.WriteLine( "Выберите кузов из списка ниже:" );
-        ICarBodyType selectedCarBodyType = SelectOption( _availableCarBodyType, x => x.Name );
+        ICarBodyType selectedCarBodyType = SelectOption( _availableCarBodyTypes, x => x.Name );
 
         Console.WriteLine( "\nВыберите цвет списка ниже:" );
-        string selectedColor = SelectOption( _availableColor, x => x );
+        string selectedColor = SelectOption( _availableColors, x => x );
 
         Console.WriteLine( "\nВыберите тип коробки передач из списка ниже:" );
-        ITransmission selectedTransmission = SelectOption( _availableTransmission, x => x.Name );
+        ITransmission selectedTransmission = SelectOption( _availableTransmissions, x => x.Name );
 
         Console.WriteLine( "\nВыберите тип двигателя из списка ниже:" );
-        ICarEngine selectedEngine = SelectOption( _availableEngine, x => x.Name );
+        ICarEngine selectedEngine = SelectOption( _availableEngines, x => x.Name );
 
         Console.WriteLine( $"\nАвтомобиль {name} успешно добавлен!\n" );
 
