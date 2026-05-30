@@ -15,10 +15,12 @@ internal class App
 
     public void RunApp()
     {
-        while ( true )
+        bool isRunning = true;
+
+        while ( isRunning )
         {
             ShowStartMenu();
-            StartMenu();
+            isRunning = StartMenu();
         }
     }
 
@@ -32,7 +34,7 @@ internal class App
             """ );
     }
 
-    private void StartMenu()
+    private bool StartMenu()
     {
         int choice = GetInputFromUser( 1, 3 );
 
@@ -47,8 +49,10 @@ internal class App
         }
         else if ( choice == 3 )
         {
-            Environment.Exit( 0 );
+            return false;
         }
+
+        return true;
     }
 
     private int GetInputFromUser( int min, int max )
