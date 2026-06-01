@@ -3,7 +3,7 @@ using FighterGame.Utilities;
 
 namespace FighterGame;
 
-internal class GameManager
+public class GameManager
 {
     private List<IFighter> _fighters = [];
 

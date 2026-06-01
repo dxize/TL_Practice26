@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Utilities;
 
-internal static class Randomizer
+static class Randomizer
 {
     private static readonly Random _random = new Random();
 

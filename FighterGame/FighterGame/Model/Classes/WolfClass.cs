@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Model.Classes;
 
-internal class WolfClass : IClass
+public class WolfClass : IClass
 {
     public string Name { get; } = "Волк";
     public int Damage { get; } = 10;

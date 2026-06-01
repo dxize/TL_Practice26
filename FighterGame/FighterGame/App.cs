@@ -2,7 +2,7 @@
 
 namespace FighterGame;
 
-internal class App
+class App
 {
     private List<IFighter> _fighters = [];
     private FighterFactory _creator = new();

@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Model;
 
-internal interface IFighter
+public interface IFighter
 {
     string Name { get; }
     int Health { get; }

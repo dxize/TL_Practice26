@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Model.Classes;
 
-internal interface IClass
+public interface IClass
 {
     string Name { get; }
     int Damage { get; }

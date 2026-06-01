@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Model.Races;
 
-internal interface IRace
+public interface IRace
 {
     string Name { get; }
     int Damage { get; }

@@ -6,7 +6,7 @@ using FighterGame.Utilities;
 
 namespace FighterGame.Model;
 
-internal class Fighter : IFighter
+public class Fighter : IFighter
 {
     private int _health;
 
