@@ -15,34 +15,23 @@ internal class App
 
     public void RunApp()
     {
-        bool isRunning = true;
+        int choice = 0;
 
-        while ( isRunning )
+        while ( choice != 3 )
         {
             ShowStartMenu();
-            isRunning = StartMenu();
-        }
-    }
 
-    private bool StartMenu()
-    {
-        int choice = GetInputFromUser( 1, 3 );
+            choice = GetInputFromUser( 1, 3 );
 
-        if ( choice == 1 )
-        {
-            Car newCar = _factory.CreateCar();
-            _cars.Add( newCar );
+            if ( choice == 1 )
+            {
+                _cars.Add( _factory.CreateCar() );
+            }
+            else if ( choice == 2 )
+            {
+                ShowInfoCars();
+            }
         }
-        else if ( choice == 2 )
-        {
-            ShowInfoCars();
-        }
-        else if ( choice == 3 )
-        {
-            return false;
-        }
-
-        return true;
     }
 
     private void ShowInfoCars()
