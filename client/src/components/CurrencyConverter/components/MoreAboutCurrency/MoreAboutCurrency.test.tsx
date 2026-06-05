@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import MoreAboutCurrency from "./MoreAboutCurrency";
+import { MoreAboutCurrency } from "./MoreAboutCurrency";
 
 describe("MoreAboutCurrency", () => {
     test("renders button", () => {
