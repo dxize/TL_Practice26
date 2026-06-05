@@ -5,7 +5,7 @@ namespace Tests.Model.Armors;
 public class ArmorTests
 {
     [Fact]
-    public void NoArmor_WhenCreated_HasExpectedArmor()
+    public void Constructor_WhenNoArmorCreated_HasNoArmor()
     {
         // Arrange
         int expectedArmor = 0;
@@ -18,7 +18,7 @@ public class ArmorTests
     }
 
     [Fact]
-    public void FirstArmor_WhenCreated_HasExpectedArmor()
+    public void Constructor_WhenFirstArmorCreated_HasExpectedArmor()
     {
         // Arrange
         int expectedArmor = 2;
@@ -31,7 +31,7 @@ public class ArmorTests
     }
 
     [Fact]
-    public void SecondArmor_WhenCreated_HasExpectedArmor()
+    public void Constructor_WhenSecondArmorCreated_HasExpectedArmor()
     {
         // Arrange
         int expectedArmor = 4;
@@ -44,7 +44,7 @@ public class ArmorTests
     }
 
     [Fact]
-    public void ThirdArmor_WhenCreated_HasExpectedArmor()
+    public void Constructor_WhenThirdArmorCreated_HasExpectedArmor()
     {
         // Arrange
         int expectedArmor = 6;

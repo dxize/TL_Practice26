@@ -6,7 +6,7 @@ namespace Tests;
 public class FighterFactoryTests
 {
     [Fact]
-    public void Create_ValidInput_ReturnsFighterWithExpectedStats()
+    public void Create_WhenInputIsValid_ReturnsFighterWithExpectedStats()
     {
         // Arrange
         string input = """
@@ -29,7 +29,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_EmptyName_UsesDefaultName()
+    public void Create_WhenNameIsEmpty_UsesDefaultName()
     {
         // Arrange
         string input = """
@@ -49,7 +49,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_WhitespaceName_UsesDefaultName()
+    public void Create_WhenNameIsWhitespace_UsesDefaultName()
     {
         // Arrange
         string input = """
@@ -69,7 +69,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_InvalidRaceInputThenValidInput_ReturnsFighter()
+    public void Create_WhenRaceInputIsInvalidThenValid_ReturnsFighter()
     {
         // Arrange
         string input = """
@@ -93,7 +93,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_InvalidClassInputThenValidInput_ReturnsFighter()
+    public void Create_WhenClassInputIsInvalidThenValid_ReturnsFighter()
     {
         // Arrange
         string input = """
@@ -117,7 +117,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_InvalidWeaponInputThenValidInput_ReturnsFighter()
+    public void Create_WhenWeaponInputIsInvalidThenValid_ReturnsFighter()
     {
         // Arrange
         string input = """
@@ -141,7 +141,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_InvalidArmorInputThenValidInput_ReturnsFighter()
+    public void Create_WhenArmorInputIsInvalidThenValid_ReturnsFighter()
     {
         // Arrange
         string input = """
@@ -165,7 +165,7 @@ public class FighterFactoryTests
     }
 
     [Fact]
-    public void Create_LastOptionsSelected_ReturnsFighterWithExpectedStats()
+    public void Create_WhenLastOptionsAreSelected_ReturnsFighterWithExpectedStats()
     {
         // Arrange
         string input = """

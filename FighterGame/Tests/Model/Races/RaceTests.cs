@@ -5,7 +5,7 @@ namespace Tests.Model.Races;
 public class RaceTests
 {
     [Fact]
-    public void AsianRace_WhenCreated_HasExpectedStats()
+    public void Constructor_WhenAsianRaceCreated_HasExpectedStats()
     {
         // Arrange
         int expectedDamage = 8;
@@ -22,7 +22,7 @@ public class RaceTests
     }
 
     [Fact]
-    public void EuropeanRace_WhenCreated_HasExpectedStats()
+    public void Constructor_WhenEuropeanRaceCreated_HasExpectedStats()
     {
         // Arrange
         int expectedDamage = 10;
@@ -39,7 +39,7 @@ public class RaceTests
     }
 
     [Fact]
-    public void NegroidRace_WhenCreated_HasExpectedStats()
+    public void Constructor_WhenNegroidRaceCreated_HasExpectedStats()
     {
         // Arrange
         int expectedDamage = 12;

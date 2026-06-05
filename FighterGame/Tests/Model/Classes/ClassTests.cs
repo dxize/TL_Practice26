@@ -5,7 +5,7 @@ namespace Tests.Model.Classes;
 public class ClassTests
 {
     [Fact]
-    public void KnightClass_WhenCreated_HasExpectedStats()
+    public void Constructor_WhenKnightClassCreated_HasExpectedStats()
     {
         // Arrange
         int expectedDamage = 8;
@@ -22,7 +22,7 @@ public class ClassTests
     }
 
     [Fact]
-    public void PeasantClass_WhenCreated_HasExpectedStats()
+    public void Constructor_WhenPeasantClassCreated_HasExpectedStats()
     {
         // Arrange
         int expectedDamage = 6;
@@ -39,7 +39,7 @@ public class ClassTests
     }
 
     [Fact]
-    public void WolfClass_WhenCreated_HasExpectedStats()
+    public void Constructor_WhenWolfClassCreated_HasExpectedStats()
     {
         // Arrange
         int expectedDamage = 10;

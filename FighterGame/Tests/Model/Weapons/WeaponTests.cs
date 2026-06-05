@@ -5,7 +5,7 @@ namespace Tests.Model.Weapons;
 public class WeaponTests
 {
     [Fact]
-    public void SwordWeapon_WhenCreated_HasExpectedDamage()
+    public void Constructor_WhenSwordWeaponCreated_HasExpectedDamage()
     {
         // Arrange
         int expectedDamage = 10;
@@ -18,7 +18,7 @@ public class WeaponTests
     }
 
     [Fact]
-    public void SpearWeapon_WhenCreated_HasExpectedDamage()
+    public void Constructor_WhenSpearWeaponCreated_HasExpectedDamage()
     {
         // Arrange
         int expectedDamage = 15;
@@ -31,7 +31,7 @@ public class WeaponTests
     }
 
     [Fact]
-    public void HandGunWeapon_WhenCreated_HasExpectedDamage()
+    public void Constructor_WhenHandGunWeaponCreated_HasExpectedDamage()
     {
         // Arrange
         int expectedDamage = 30;

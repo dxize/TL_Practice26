@@ -10,7 +10,7 @@ namespace Tests.Model;
 public class FighterTests
 {
     [Fact]
-    public void Constructor_ValidArguments_SetsName()
+    public void Constructor_WhenArgumentsAreValid_SetsName()
     {
         // Arrange
         string expectedName = "Test Fighter";
@@ -23,7 +23,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void Constructor_ValidArguments_CalculatesHealthFromRaceAndClass()
+    public void Constructor_WhenArgumentsAreValid_CalculatesHealthFromRaceAndClass()
     {
         // Arrange
         int raceHealth = 100;
@@ -41,7 +41,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void Constructor_ValidArguments_SetsInitiativeInRange()
+    public void Constructor_WhenArgumentsAreValid_SetsInitiativeInRange()
     {
         // Arrange and Act
         Fighter fighter = CreateFighter();
@@ -51,7 +51,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void Constructor_ValidArguments_SetsIsAliveTrue()
+    public void Constructor_WhenArgumentsAreValid_SetsIsAliveTrue()
     {
         // Arrange and Act
         Fighter fighter = CreateFighter();
@@ -61,7 +61,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void Constructor_ValidArguments_ReadsHealthFromRaceAndClass()
+    public void Constructor_WhenArgumentsAreValid_ReadsHealthFromRaceAndClass()
     {
         // Arrange
         Mock<IRace> raceMock = CreateRaceMock( health: 100 );
@@ -173,7 +173,7 @@ public class FighterTests
     [InlineData( 10, 140 )]
     [InlineData( 50, 100 )]
     [InlineData( 149, 1 )]
-    public void TakeDamage_PositiveDamage_DecreasesHealth(
+    public void TakeDamage_WhenDamageIsPositive_DecreasesHealth(
         int damage,
         int expectedHealth )
     {
@@ -191,7 +191,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void TakeDamage_ZeroDamage_DoesNotChangeHealth()
+    public void TakeDamage_WhenDamageIsZero_DoesNotChangeHealth()
     {
         // Arrange
         Fighter fighter = CreateFighter(
@@ -207,7 +207,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void TakeDamage_DamageEqualsHealth_SetsHealthToZero()
+    public void TakeDamage_WhenDamageEqualsHealth_SetsHealthToZero()
     {
         // Arrange
         Fighter fighter = CreateFighter(
@@ -223,7 +223,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void TakeDamage_DamageGreaterThanHealth_SetsHealthToZero()
+    public void TakeDamage_WhenDamageGreaterThanHealth_SetsHealthToZero()
     {
         // Arrange
         Fighter fighter = CreateFighter(

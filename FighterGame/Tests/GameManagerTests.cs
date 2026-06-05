@@ -7,7 +7,7 @@ namespace Tests;
 public class GameManagerTests
 {
     [Fact]
-    public void StartBattle_WithZeroFighters_DoesNothing()
+    public void StartBattle_WhenFightersListIsEmpty_DoesNothing()
     {
         // Arrange
         List<IFighter> fighters = [];
@@ -21,7 +21,7 @@ public class GameManagerTests
     }
 
     [Fact]
-    public void StartBattle_WithOneFighter_DoesNotAttack()
+    public void StartBattle_WhenOnlyOneFighterExists_DoesNotAttack()
     {
         // Arrange
         Mock<IFighter> fighterMock = CreateFighterMock(
@@ -44,7 +44,7 @@ public class GameManagerTests
     }
 
     [Fact]
-    public void StartBattle_WithTwoFighters_TargetTakesDamage()
+    public void StartBattle_WhenTwoFightersExist_TargetTakesDamage()
     {
         // Arrange
         bool defenderAlive = true;
@@ -82,7 +82,7 @@ public class GameManagerTests
     }
 
     [Fact]
-    public void StartBattle_WithTwoFighters_RemovesDeadFighter()
+    public void StartBattle_WhenTwoFightersExist_RemovesDeadFighter()
     {
         // Arrange
         bool defenderAlive = true;
@@ -121,7 +121,7 @@ public class GameManagerTests
     }
 
     [Fact]
-    public void StartBattle_FighterWithHigherInitiative_AttacksFirst()
+    public void StartBattle_WhenFighterHasHigherInitiative_AttacksFirst()
     {
         // Arrange
         bool lowInitiativeFighterAlive = true;
