@@ -2,7 +2,7 @@
 
 namespace FighterGame;
 
-class App
+internal class App
 {
     private List<IFighter> _fighters = [];
     private FighterFactory _creator = new();
@@ -115,7 +115,7 @@ class App
                     continue;
                 }
 
-                GameManager manager = new GameManager( _fighters );
+                GameManager manager = new( _fighters );
                 manager.StartBattle();
 
                 _fighters.Clear();

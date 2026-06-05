@@ -1,6 +1,6 @@
 ﻿namespace FighterGame;
 
-class Program
+internal class Program
 {
     private static void Main()
     {

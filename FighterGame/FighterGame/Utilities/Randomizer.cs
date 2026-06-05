@@ -1,8 +1,8 @@
 ﻿namespace FighterGame.Utilities;
 
-static class Randomizer
+internal static class Randomizer
 {
-    private static readonly Random _random = new Random();
+    private static readonly Random _random = new();
 
     public static int GetInt( int maxValue )
     {
