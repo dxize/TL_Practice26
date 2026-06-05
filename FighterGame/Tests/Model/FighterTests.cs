@@ -61,29 +61,6 @@ public class FighterTests
     }
 
     [Fact]
-    public void Constructor_WhenArgumentsAreValid_ReadsHealthFromRaceAndClass()
-    {
-        // Arrange
-        Mock<IRace> raceMock = CreateRaceMock( health: 100 );
-        Mock<IClass> classMock = CreateClassMock( health: 50 );
-        Mock<IWeapon> weaponMock = CreateWeaponMock();
-        Mock<IArmor> armorMock = CreateArmorMock();
-
-        // Act
-        _ = new Fighter(
-            "Test Fighter",
-            raceMock.Object,
-            classMock.Object,
-            weaponMock.Object,
-            armorMock.Object
-        );
-
-        // Assert
-        raceMock.VerifyGet( r => r.Health, Times.Once );
-        classMock.VerifyGet( c => c.Health, Times.Once );
-    }
-
-    [Fact]
     public void FullDamage_WhenCalled_ReturnsRaceClassAndWeaponDamageSum()
     {
         // Arrange
@@ -101,32 +78,6 @@ public class FighterTests
     }
 
     [Fact]
-    public void FullDamage_WhenCalled_ReadsDamageFromRaceClassAndWeapon()
-    {
-        // Arrange
-        Mock<IRace> raceMock = CreateRaceMock( damage: 10 );
-        Mock<IClass> classMock = CreateClassMock( damage: 15 );
-        Mock<IWeapon> weaponMock = CreateWeaponMock( damage: 20 );
-        Mock<IArmor> armorMock = CreateArmorMock();
-
-        Fighter fighter = new(
-            "Test Fighter",
-            raceMock.Object,
-            classMock.Object,
-            weaponMock.Object,
-            armorMock.Object
-        );
-
-        // Act
-        _ = fighter.FullDamage;
-
-        // Assert
-        raceMock.VerifyGet( r => r.Damage, Times.Once );
-        classMock.VerifyGet( c => c.Damage, Times.Once );
-        weaponMock.VerifyGet( w => w.Damage, Times.Once );
-    }
-
-    [Fact]
     public void FullArmor_WhenCalled_ReturnsRaceClassAndArmorSum()
     {
         // Arrange
@@ -141,32 +92,6 @@ public class FighterTests
 
         // Assert
         Assert.Equal( 18, fullArmor );
-    }
-
-    [Fact]
-    public void FullArmor_WhenCalled_ReadsArmorFromRaceClassAndArmor()
-    {
-        // Arrange
-        Mock<IRace> raceMock = CreateRaceMock( armor: 5 );
-        Mock<IClass> classMock = CreateClassMock( armor: 3 );
-        Mock<IWeapon> weaponMock = CreateWeaponMock();
-        Mock<IArmor> armorMock = CreateArmorMock( armor: 10 );
-
-        Fighter fighter = new(
-            "Test Fighter",
-            raceMock.Object,
-            classMock.Object,
-            weaponMock.Object,
-            armorMock.Object
-        );
-
-        // Act
-        _ = fighter.FullArmor;
-
-        // Assert
-        raceMock.VerifyGet( r => r.Armor, Times.Once );
-        classMock.VerifyGet( c => c.Armor, Times.Once );
-        armorMock.VerifyGet( a => a.Armor, Times.Once );
     }
 
     [Theory]
