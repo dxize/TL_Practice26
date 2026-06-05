@@ -51,7 +51,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void Constructor_WhenArgumentsAreValid_SetsIsAliveTrue()
+    public void Constructor_WhenArgumentsAreValid_Alive()
     {
         // Arrange and Act
         Fighter fighter = CreateFighter();
@@ -239,7 +239,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void TakeDamage_WhenHealthBecomesZero_SetsIsAliveFalse()
+    public void TakeDamage_WhenHealthBecomesZero_BecomesDead()
     {
         // Arrange
         Fighter fighter = CreateFighter(
@@ -255,7 +255,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void TakeDamage_WhenHealthRemainsPositive_SetsIsAliveTrue()
+    public void TakeDamage_WhenHealthRemainsPositive_Alive()
     {
         // Arrange
         Fighter fighter = CreateFighter(
