@@ -4,53 +4,46 @@ namespace Tests.Model.Armors;
 
 public class ArmorTests
 {
-    [Fact]
-    public void Constructor_WhenNoArmorCreated_HasNoArmor()
+    private const string NoArmorName = "NoArmor";
+    private const int NoArmorExpectedArmor = 0;
+
+    private const string FirstArmorName = "FirstArmor";
+    private const int FirstArmorExpectedArmor = 2;
+
+    private const string SecondArmorName = "SecondArmor";
+    private const int SecondArmorExpectedArmor = 4;
+
+    private const string ThirdArmorName = "ThirdArmor";
+    private const int ThirdArmorExpectedArmor = 6;
+
+    [Theory]
+    [InlineData( NoArmorName, NoArmorExpectedArmor )]
+    [InlineData( FirstArmorName, FirstArmorExpectedArmor )]
+    [InlineData( SecondArmorName, SecondArmorExpectedArmor )]
+    [InlineData( ThirdArmorName, ThirdArmorExpectedArmor )]
+    public void Constructor_WhenArmorCreated_HasExpectedArmor(
+        string armorName,
+        int expectedArmor )
     {
         // Arrange
-        int expectedArmor = 0;
+        IArmor armor;
 
-        // Act
-        NoArmor armor = new();
-
-        // Assert
-        Assert.Equal( expectedArmor, armor.Armor );
-    }
-
-    [Fact]
-    public void Constructor_WhenFirstArmorCreated_HasExpectedArmor()
-    {
-        // Arrange
-        int expectedArmor = 2;
-
-        // Act
-        FirstArmor armor = new();
-
-        // Assert
-        Assert.Equal( expectedArmor, armor.Armor );
-    }
-
-    [Fact]
-    public void Constructor_WhenSecondArmorCreated_HasExpectedArmor()
-    {
-        // Arrange
-        int expectedArmor = 4;
-
-        // Act
-        SecondArmor armor = new();
-
-        // Assert
-        Assert.Equal( expectedArmor, armor.Armor );
-    }
-
-    [Fact]
-    public void Constructor_WhenThirdArmorCreated_HasExpectedArmor()
-    {
-        // Arrange
-        int expectedArmor = 6;
-
-        // Act
-        ThirdArmor armor = new();
+        if ( armorName == NoArmorName )
+        {
+            armor = new NoArmor();
+        }
+        else if ( armorName == FirstArmorName )
+        {
+            armor = new FirstArmor();
+        }
+        else if ( armorName == SecondArmorName )
+        {
+            armor = new SecondArmor();
+        }
+        else
+        {
+            armor = new ThirdArmor();
+        }
 
         // Assert
         Assert.Equal( expectedArmor, armor.Armor );

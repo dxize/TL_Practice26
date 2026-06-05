@@ -4,50 +4,46 @@ namespace Tests.Model.Races;
 
 public class RaceTests
 {
-    [Fact]
-    public void Constructor_WhenAsianRaceCreated_HasExpectedStats()
+    private const string Asian = "Asian";
+    private const int AsianExpectedDamage = 8;
+    private const int AsianExpectedHealth = 70;
+    private const int AsianExpectedArmor = 10;
+
+    private const string European = "European";
+    private const int EuropeanExpectedDamage = 10;
+    private const int EuropeanExpectedHealth = 90;
+    private const int EuropeanExpectedArmor = 4;
+
+    private const string Negroid = "Negroid";
+    private const int NegroidExpectedDamage = 12;
+    private const int NegroidExpectedHealth = 110;
+    private const int NegroidExpectedArmor = 1;
+
+    [Theory]
+    [InlineData( Asian, AsianExpectedDamage, AsianExpectedHealth, AsianExpectedArmor )]
+    [InlineData( European, EuropeanExpectedDamage, EuropeanExpectedHealth, EuropeanExpectedArmor )]
+    [InlineData( Negroid, NegroidExpectedDamage, NegroidExpectedHealth, NegroidExpectedArmor )]
+    public void Constructor_WhenRaceCreated_HasExpectedStats(
+        string raceName,
+        int expectedDamage,
+        int expectedHealth,
+        int expectedArmor )
     {
         // Arrange
-        int expectedDamage = 8;
-        int expectedHealth = 70;
-        int expectedArmor = 10;
+        IRace race;
 
-        // Act
-        AsianRace race = new();
-
-        // Assert
-        Assert.Equal( expectedDamage, race.Damage );
-        Assert.Equal( expectedHealth, race.Health );
-        Assert.Equal( expectedArmor, race.Armor );
-    }
-
-    [Fact]
-    public void Constructor_WhenEuropeanRaceCreated_HasExpectedStats()
-    {
-        // Arrange
-        int expectedDamage = 10;
-        int expectedHealth = 90;
-        int expectedArmor = 4;
-
-        // Act
-        EuropeanRace race = new();
-
-        // Assert
-        Assert.Equal( expectedDamage, race.Damage );
-        Assert.Equal( expectedHealth, race.Health );
-        Assert.Equal( expectedArmor, race.Armor );
-    }
-
-    [Fact]
-    public void Constructor_WhenNegroidRaceCreated_HasExpectedStats()
-    {
-        // Arrange
-        int expectedDamage = 12;
-        int expectedHealth = 110;
-        int expectedArmor = 1;
-
-        // Act
-        NegroidRace race = new();
+        if ( raceName == Asian )
+        {
+            race = new AsianRace();
+        }
+        else if ( raceName == European )
+        {
+            race = new EuropeanRace();
+        }
+        else
+        {
+            race = new NegroidRace();
+        }
 
         // Assert
         Assert.Equal( expectedDamage, race.Damage );
