@@ -5,13 +5,13 @@ import { MoreAboutCurrency } from "./MoreAboutCurrency";
 
 describe("MoreAboutCurrency", () => {
     test("renders button", () => {
-        render(<MoreAboutCurrency />);
+        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
 
         expect(screen.getByRole("button", { name: /PLN\/JPY: about/i })).toBeInTheDocument();
     });
 
     test("description is hidden by default", () => {
-        render(<MoreAboutCurrency />);
+        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
 
         expect(screen.queryByText(/Polish zloty/i)).not.toBeInTheDocument();
         expect(screen.queryByText(/Japanese yen/i)).not.toBeInTheDocument();
@@ -20,7 +20,7 @@ describe("MoreAboutCurrency", () => {
     test("shows description after click", async () => {
         const user = userEvent.setup();
 
-        render(<MoreAboutCurrency />);
+        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
 
         const button = screen.getByRole("button", { name: /PLN\/JPY: about/i });
 
@@ -36,7 +36,7 @@ describe("MoreAboutCurrency", () => {
     test("hides description after second click", async () => {
         const user = userEvent.setup();
 
-        render(<MoreAboutCurrency />);
+        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
 
         const button = screen.getByRole("button", { name: /PLN\/JPY: about/i });
 

@@ -9,7 +9,7 @@ export const CurrencyConverter = () => {
             <HeaderCurrencyConverter />
             <InputCurrencyCoverter currencyName="PLN" currencyRate="1" />
             <InputCurrencyCoverter currencyName="JPY" currencyRate="0,99" />
-            <MoreAboutCurrency/>
+            <MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY"/>
         </div>
     );
 }
