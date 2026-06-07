@@ -5,19 +5,19 @@
     margin: clamp(12px, 2vw, 20px) 0 ;
 }
 
-.container__open-about {
+.openAbout {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.container__open-about__line {
+.line {
     inline-size: 40%;
     block-size: 0;
     border: 1px solid #D9D9D9;
 }
 
-.container__open-about__button {
+.button {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -32,7 +32,7 @@
     cursor: pointer;
 }
 
-.container__open-about__button__text {
+.buttonText {
     font-family: Inter;
     font-size: clamp(16px, 1.5vw, 22.06px);
     font-weight: 400;
@@ -41,13 +41,13 @@
     letter-spacing: 0%;
 }
 
-.container__open-about__button__arrow {
+.arrow {
     inline-size: 7%;
     block-size: 70%;
     transform: rotate(180deg);
     transition: transform 0.25s ease;
 }
 
-.container__open-about__button__arrow-active {
+.arrowActive {
     transform: rotate(0deg);
 }

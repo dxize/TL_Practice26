@@ -9,7 +9,7 @@
     border-radius: 6px;
 }
 
-.container__input {
+.input {
     inline-size: 15%;
 
     border: none;
@@ -23,18 +23,18 @@
     letter-spacing: 0;
 }
 
-.container__input:focus {
+.input:focus {
     outline: none;
 }
 
-.container__separator {
+.separator {
     inline-size: 0;
     block-size: 60%;
     margin: auto 0;
     border: 1px solid #D9D9D9;
 }
 
-.container__button {
+.button {
     display: flex;
 
     inline-size: 100%;
@@ -46,7 +46,7 @@
     cursor: pointer;
 }
 
-.container__button__currency-name {
+.currencyName {
     margin: auto 0 auto 30px;
 
     font-family: Inter;
@@ -56,7 +56,7 @@
     letter-spacing: 0;
 }
 
-.container__button__icon {
+.icon {
     display: flex;     
     justify-content: center;
     align-items: center;
@@ -72,7 +72,6 @@
     transition: transform 0.25s ease;
 }
 
-.container__button__icon-active {
+.iconActive {
     transform: rotate(180deg);
 }
-

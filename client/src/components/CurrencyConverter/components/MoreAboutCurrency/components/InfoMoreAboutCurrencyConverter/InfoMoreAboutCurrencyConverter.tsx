@@ -20,8 +20,8 @@ export const InfoMoreAboutCurrencyConverter = ({currencyName} : InfoMoreAboutCur
 
     return (
         <div className={styles.container}>
-            <div className={styles.containerTitle}>{title}</div>
-            <div className={styles.containerSubtitle}>{subTitle}</div>
+            <div className={styles.title}>{title}</div>
+            <div className={styles.subtitle}>{subTitle}</div>
         </div>
     )
 }

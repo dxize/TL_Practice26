@@ -5,7 +5,7 @@ import styles from "./CurrencyConverter.module.scss";
 
 export const CurrencyConverter = () => {
     return (
-        <div className={styles.currencyConverterBody}>
+        <div className={styles.body}>
             <HeaderCurrencyConverter />
             <InputCurrencyCoverter currencyName="PLN" currencyRate="1" />
             <InputCurrencyCoverter currencyName="JPY" currencyRate="0,99" />

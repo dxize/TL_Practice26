@@ -13,13 +13,13 @@ export const MoreAboutCurrency = ({ fromCurrency, toCurrency }: MoreAboutCurrenc
 
     return (
         <div className={styles.container}>
-            <div className={styles.containerOpenAbout}>
-                <div className={styles.containerOpenAboutLine}/>
-                <button className={styles.containerOpenAboutButton} onClick={() => setIsOpen(!isOpen)}>
-                    <div className={styles.containerOpenAboutButtonText}>{fromCurrency}/{toCurrency}: about</div>
-                    <img className={isOpen ? `${styles.containerOpenAboutButtonArrow} ${styles.containerOpenAboutButtonArrowActive}` : styles.containerOpenAboutButtonArrow} src={ArrowSvg}/>
+            <div className={styles.openAbout}>
+                <div className={styles.line}/>
+                <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
+                    <div className={styles.buttonText}>{fromCurrency}/{toCurrency}: about</div>
+                    <img className={isOpen ? `${styles.arrow} ${styles.arrowActive}` : styles.arrow} src={ArrowSvg}/>
                 </button>
-                <div className={styles.containerOpenAboutLine}/>
+                <div className={styles.line}/>
             </div>
             {isOpen && (
                 <>

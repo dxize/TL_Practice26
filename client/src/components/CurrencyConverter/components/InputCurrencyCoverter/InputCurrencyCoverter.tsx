@@ -28,11 +28,11 @@ export const InputCurrencyCoverter = ({currencyName, currencyRate}: InputCurrenc
 
     return (
         <div className={styles.container}>
-            <input className={styles.containerInput} type="text" value={value} onChange={inputOnChange} onBlur={inputOnBlur}/>
-            <div className={styles.containerSeparator}/>
-            <button className={styles.containerButton} onClick={() => setIsOpen(!isOpen)}>
-                <div className={styles.containerButtonCurrencyName}>{currencyName}</div>
-                <div className={isOpen ? `${styles.containerButtonIcon} ${styles.containerButtonIconActive}` : styles.containerButtonIcon}>
+            <input className={styles.input} type="text" value={value} onChange={inputOnChange} onBlur={inputOnBlur}/>
+            <div className={styles.separator}/>
+            <button className={styles.button} onClick={() => setIsOpen(!isOpen)}>
+                <div className={styles.currencyName}>{currencyName}</div>
+                <div className={isOpen ? `${styles.icon} ${styles.iconActive}` : styles.icon}>
                     <img src={TriangleSvg}/>
                 </div>
             </button>

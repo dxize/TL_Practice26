@@ -2,7 +2,7 @@
     margin: 16px 0;
 }
 
-.container__title {
+.title {
     color: #000;
     font-family: Inter;
     font-size: clamp(16px, 1.5vw, 26.14px);
@@ -12,7 +12,7 @@
     letter-spacing: 0%;
 }
 
-.container__subtitle {
+.subtitle {
     margin-block-start: 5px;
 
     color: #767676;

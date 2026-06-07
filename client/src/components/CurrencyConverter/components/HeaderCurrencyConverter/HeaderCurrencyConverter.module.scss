@@ -7,7 +7,7 @@
     margin-block-start: clamp(16px, 3vw, 29px); 
 }
 
-.header__label {
+.label {
     color: #767676;
     font-family: Inter;
     font-size: 16px; 
@@ -16,7 +16,7 @@
     letter-spacing: 0;
 }
 
-.header__rate {
+.rate {
     color: #000;
     font-family: Inter;
     font-size: 40px; 
@@ -25,7 +25,7 @@
     letter-spacing: 0;
 }
 
-.header__date {
+.date {
     margin-block-start: clamp(12px, 2vw, 19px);
 
     color: #767676;
