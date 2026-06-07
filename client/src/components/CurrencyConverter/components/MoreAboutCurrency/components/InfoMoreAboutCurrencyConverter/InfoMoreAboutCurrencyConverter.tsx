@@ -19,7 +19,7 @@ export const InfoMoreAboutCurrencyConverter = ({currencyName} : InfoMoreAboutCur
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} data-testid={`currency-info-${currencyName}`}>
             <div className={styles.title}>{title}</div>
             <div className={styles.subtitle}>{subTitle}</div>
         </div>

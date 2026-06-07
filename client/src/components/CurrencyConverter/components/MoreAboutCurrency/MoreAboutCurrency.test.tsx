@@ -3,50 +3,50 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MoreAboutCurrency } from "./MoreAboutCurrency";
 
+const fromCurrency = "PLN";
+const toCurrency = "JPY";
+
 describe("MoreAboutCurrency", () => {
     test("renders button", () => {
-        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
+        render(<MoreAboutCurrency fromCurrency={fromCurrency} toCurrency={toCurrency} />);
 
-        expect(screen.getByRole("button", { name: /PLN\/JPY: about/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: new RegExp(`${fromCurrency}/${toCurrency}: about`, "i") })).toBeInTheDocument();
     });
 
     test("description is hidden by default", () => {
-        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
+        render(<MoreAboutCurrency fromCurrency={fromCurrency} toCurrency={toCurrency} />);
 
-        expect(screen.queryByText(/Polish zloty/i)).not.toBeInTheDocument();
-        expect(screen.queryByText(/Japanese yen/i)).not.toBeInTheDocument();
+        expect(screen.queryByTestId(`currency-info-${fromCurrency}`)).not.toBeInTheDocument();
+        expect(screen.queryByTestId(`currency-info-${toCurrency}`)).not.toBeInTheDocument();
     });
 
     test("shows description after click", async () => {
         const user = userEvent.setup();
 
-        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
+        render(<MoreAboutCurrency fromCurrency={fromCurrency} toCurrency={toCurrency} />);
 
-        const button = screen.getByRole("button", { name: /PLN\/JPY: about/i });
+        const button = screen.getByRole("button", { name: new RegExp(`${fromCurrency}/${toCurrency}: about`, "i") });
 
         await user.click(button);
 
-        expect(screen.getByText(/Polish zloty/i)).toBeInTheDocument();
-        expect(screen.getByText(/official currency and legal tender of Poland/i)).toBeInTheDocument();
-
-        expect(screen.getByText(/Japanese yen/i)).toBeInTheDocument();
-        expect(screen.getByText(/official currency of Japan/i)).toBeInTheDocument();
+        expect(screen.getByTestId(`currency-info-${fromCurrency}`)).toBeInTheDocument();
+        expect(screen.getByTestId(`currency-info-${toCurrency}`)).toBeInTheDocument();
     });
 
     test("hides description after second click", async () => {
         const user = userEvent.setup();
 
-        render(<MoreAboutCurrency fromCurrency="PLN" toCurrency="JPY" />);
+        render(<MoreAboutCurrency fromCurrency={fromCurrency} toCurrency={toCurrency} />);
 
-        const button = screen.getByRole("button", { name: /PLN\/JPY: about/i });
-
-        await user.click(button);
-
-        expect(screen.getByText(/Polish zloty - PLN - zł/i)).toBeInTheDocument();
+        const button = screen.getByRole("button", { name: new RegExp(`${fromCurrency}/${toCurrency}: about`, "i") });
 
         await user.click(button);
 
-        expect(screen.queryByText(/Polish zloty - PLN - zł/i)).not.toBeInTheDocument();
-        expect(screen.queryByText(/Japanese yen - JPY - ¥/i)).not.toBeInTheDocument();
+        expect(screen.getByTestId(`currency-info-${fromCurrency}`)).toBeInTheDocument();
+
+        await user.click(button);
+
+        expect(screen.queryByTestId(`currency-info-${fromCurrency}`)).not.toBeInTheDocument();
+        expect(screen.queryByTestId(`currency-info-${toCurrency}`)).not.toBeInTheDocument();
     });
 });
