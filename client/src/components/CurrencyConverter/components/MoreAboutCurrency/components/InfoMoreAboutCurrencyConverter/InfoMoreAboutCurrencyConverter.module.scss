@@ -1,0 +1,23 @@
+.container {
+    margin: 16px 0;
+}
+
+.title {
+    color: #000;
+    font-family: Inter;
+    font-size: clamp(16px, 1.5vw, 26.14px);
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.subtitle {
+    margin-block-start: 5px;
+
+    color: #767676;
+    font-family: Inter;
+    font-size: clamp(14px, 1.5vw, 21.24px);
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
