@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     inline-size: 94%;
-    margin: clamp(12px, 2vw, 20px) 0 ;
+    margin: clamp(12px, 2vw, 20px) 0;
 }
 
 .openAbout {
@@ -12,18 +12,22 @@
 }
 
 .line {
-    inline-size: 40%;
+    flex: 1;
+
     block-size: 0;
+
     border: 1px solid #D9D9D9;
 }
 
 .button {
     display: flex;
-    justify-content: space-evenly;
+    flex-shrink: 0;
+    justify-content: center;
     align-items: center;
+    gap: 8px;
 
-    inline-size: 20%;
     block-size: clamp(25px, 3vw, 48px);
+    padding: 0 clamp(12px, 1.5vw, 20px);
 
     border: none;
     border-color: #D9D9D9;

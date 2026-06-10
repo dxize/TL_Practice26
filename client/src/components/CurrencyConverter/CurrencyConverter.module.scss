@@ -1,4 +1,4 @@
-.body {  
+.body {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,4 +8,21 @@
 
     background-color: #FFF;
     border-radius: 30px;
+}
+
+.converterRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    inline-size: 90%;
+    margin-block-start: clamp(12px, 2vw, 20px);
+}
+
+.inputsColumn {
+    display: flex;
+    flex-direction: column;
+    inline-size: 50%;
+    gap: 16px;
 }

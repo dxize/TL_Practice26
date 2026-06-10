@@ -1,11 +1,5 @@
-import './App.module.scss'
-import {CurrencyConverter} from './components/CurrencyConverter/CurrencyConverter'
-import styles from './App.module.scss';
+import { MainPage } from "./pages/MainPage/MainPage";
 
 export const App = () => {
-  return (
-    <div className={styles.app}>
-      <CurrencyConverter/>
-    </div>
-  )
-}
+    return <MainPage />;
+};
