@@ -61,7 +61,7 @@ export const InputCurrencyCoverter = ({
                         </option>
                     ))}
                 </select>
-                <img className={styles.icon} src={TriangleSvg} alt="" />
+                <img className={styles.icon} src={TriangleSvg} alt="Triangle" />
             </div>
         </div>
     )

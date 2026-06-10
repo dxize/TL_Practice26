@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import type { Currency, PriceChange } from "../models";
 
 export const useConverter = (
@@ -9,27 +9,17 @@ export const useConverter = (
     const [toCode, setToCode] = useState(currencies[1].code);
     const [amount, setAmount] = useState("1");
 
-    const fromCurrency = useMemo(
-        () => currencies.find((c) => c.code === fromCode)!,
-        [currencies, fromCode]
-    );
+    const fromCurrency = currencies.find((c) => c.code === fromCode)!;
 
-    const toCurrency = useMemo(
-        () => currencies.find((c) => c.code === toCode)!,
-        [currencies, toCode]
-    );
+    const toCurrency = currencies.find((c) => c.code === toCode)!;
 
     const priceChange = priceChanges[fromCode]?.[toCode] ?? null;
 
-    const result = useMemo(() => {
-        const numericAmount = parseFloat(amount.replace(",", "."));
-
-        if (isNaN(numericAmount) || !priceChange) {
-            return "";
-        }
-
-        return (numericAmount * priceChange.price).toFixed(2);
-    }, [amount, priceChange]);
+    const numericAmount = parseFloat(amount.replace(",", "."));
+    const result =
+        isNaN(numericAmount) || !priceChange
+            ? ""
+            : (numericAmount * priceChange.price).toFixed(2);
 
     /**
      * При совпадении выбранной валюты с другим селектом —
