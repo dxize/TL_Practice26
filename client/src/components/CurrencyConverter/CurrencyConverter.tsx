@@ -1,5 +1,5 @@
 import { useConverter } from "../../hooks/useConverter";
-import { currencies, priceChanges } from "../../mocks";
+
 import { HeaderCurrencyConverter } from "./components/HeaderCurrencyConverter/HeaderCurrencyConverter";
 import { InputCurrencyCoverter } from "./components/InputCurrencyCoverter/InputCurrencyCoverter";
 import { SwapButton } from "./components/SwapButton/SwapButton";
@@ -8,27 +8,40 @@ import styles from "./CurrencyConverter.module.scss";
 
 export const CurrencyConverter = () => {
     const {
-        fromCode,
-        toCode,
-        amount,
+        state: { amount, fromCode, toCode, currencies, isLoading, error, toastError, priceChange },
         result,
         pairKey,
         fromCurrency,
         toCurrency,
-        priceChange,
         setAmount,
         handleFromChange,
         handleToChange,
         swap,
-    } = useConverter(currencies, priceChanges);
+    } = useConverter();
+
+    if (isLoading && currencies.length === 0) {
+        return <div className={styles.loader}>Loading...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className={styles.errorCard}>
+                COULD NOT GET DATA<br />FROM THE SERVER.
+            </div>
+        );
+    }
 
     return (
         <div className={styles.body}>
-            <HeaderCurrencyConverter
-                fromCurrency={fromCurrency}
-                toCurrency={toCurrency}
-                priceChange={priceChange}
-            />
+            {toastError && <div className={styles.toast}>{toastError}</div>}
+            
+            {fromCurrency && toCurrency && (
+                <HeaderCurrencyConverter
+                    fromCurrency={fromCurrency}
+                    toCurrency={toCurrency}
+                    priceChange={priceChange}
+                />
+            )}
 
             <div className={styles.converterRow}>
                 <SwapButton onClick={swap} />
@@ -62,11 +75,13 @@ export const CurrencyConverter = () => {
               Так же если делать через пропсы произойдёт перерендер всех 
               компонентов, что может вызвать лишние вычисления.
             */}
-            <MoreAboutCurrency
-                key={pairKey}
-                fromCurrency={fromCurrency}
-                toCurrency={toCurrency}
-            />
+            {fromCurrency && toCurrency && (
+                <MoreAboutCurrency
+                    key={pairKey}
+                    fromCurrency={fromCurrency}
+                    toCurrency={toCurrency}
+                />
+            )}
         </div>
     );
 };

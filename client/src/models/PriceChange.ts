@@ -1,6 +1,6 @@
 export type PriceChange = {
-    purchasedCurrencyCode: string;
-    paymentCurrencyCode: string;
+    fromCurrencyCode: string;
+    toCurrencyCode: string;
     price: number;
     dateTime: string;
 };

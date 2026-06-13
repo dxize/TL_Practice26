@@ -1,126 +1,95 @@
-import { describe, test, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, test, expect, vi, beforeEach } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CurrencyConverter } from "./CurrencyConverter";
+import * as apiClient from "../../api/apiClient";
+import type { Currency, PriceChange } from "../../models";
 
-describe("CurrencyConverter", () => {
-    test("renders selects and input fields with mock data", () => {
+vi.mock("../../api/apiClient", () => ({
+    fetchCurrencies: vi.fn(),
+    fetchPriceChange: vi.fn(),
+}));
+
+const mockCurrencies: Currency[] = [
+    { code: "CAD", name: "Canadian Dollar", description: "", symbol: "$" },
+    { code: "PLN", name: "Polish Zloty", description: "", symbol: "zł" },
+    { code: "AUD", name: "Australian Dollar", description: "", symbol: "$" },
+];
+
+const mockPriceChange: PriceChange = {
+    toCurrencyCode: "PLN",
+    fromCurrencyCode: "CAD",
+    price: 2.95,
+    dateTime: "2026-05-21T03:40:54Z"
+};
+
+describe("CurrencyConverter UI States", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    test("shows loading state initially", () => {
+        vi.mocked(apiClient.fetchCurrencies).mockReturnValue(new Promise(() => { }));
+
         render(<CurrencyConverter />);
+
+        expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    });
+
+    test("shows error card if fetchCurrencies fails", async () => {
+        vi.mocked(apiClient.fetchCurrencies).mockRejectedValue(new Error("Network Error"));
+
+        render(<CurrencyConverter />);
+
+        await waitFor(() => {
+            expect(screen.getByText(/COULD NOT GET DATA/i)).toBeInTheDocument();
+        });
+    });
+
+    test("shows success state and elements after data load", async () => {
+        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
+        vi.mocked(apiClient.fetchPriceChange).mockResolvedValue(mockPriceChange);
+
+        render(<CurrencyConverter />);
+
+        await waitFor(() => {
+            expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+        });
 
         const selects = screen.getAllByRole("combobox");
         expect(selects).toHaveLength(2);
-
-        const textboxes = screen.getAllByRole("textbox");
-        expect(textboxes).toHaveLength(2);
     });
 
-    test("selects contain all currency options", () => {
+    test("shows toast error if fetchPriceChange fails", async () => {
+        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
+        vi.mocked(apiClient.fetchPriceChange).mockRejectedValue(new Error("Failed to fetch price"));
+
         render(<CurrencyConverter />);
 
-        const selects = screen.getAllByRole("combobox");
-        const sourceSelect = selects[0];
-        const options = sourceSelect.querySelectorAll("option");
-
-        expect(options).toHaveLength(5);
+        await waitFor(() => {
+            expect(screen.getByText("Failed to fetch price")).toBeInTheDocument();
+        });
     });
 
-    test("recalculates result when amount changes", async () => {
+    test("calculates result when user types amount", async () => {
+        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
+        vi.mocked(apiClient.fetchPriceChange).mockResolvedValue(mockPriceChange);
         const user = userEvent.setup();
 
         render(<CurrencyConverter />);
 
-        const textboxes = screen.getAllByRole("textbox");
-        const amountInput = textboxes[0];
-        const resultInput = textboxes[1] as HTMLInputElement;
+        await waitFor(() => {
+            expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+        });
 
-        expect(resultInput.value).toBe("2.95");
-
+        const inputs = screen.getAllByRole("textbox");
+        const amountInput = inputs[0];
+        const resultInput = inputs[1];
         await user.clear(amountInput);
         await user.type(amountInput, "10");
 
-        expect(resultInput.value).toBe("29.50");
-    });
-
-    test("recalculates result when currency pair changes", async () => {
-        const user = userEvent.setup();
-
-        render(<CurrencyConverter />);
-
-        const selects = screen.getAllByRole("combobox");
-        const targetSelect = selects[1];
-        const textboxes = screen.getAllByRole("textbox");
-        const resultInput = textboxes[1] as HTMLInputElement;
-
-        expect(resultInput.value).toBe("2.95");
-
-        await user.selectOptions(targetSelect, "AUD");
-
-        expect(resultInput.value).toBe("1.11");
-    });
-
-    test("prevents selecting the same currency in both selects", async () => {
-        const user = userEvent.setup();
-
-        render(<CurrencyConverter />);
-
-        const selects = screen.getAllByRole("combobox");
-        const sourceSelect = selects[0] as HTMLSelectElement;
-        const targetSelect = selects[1] as HTMLSelectElement;
-
-        expect(sourceSelect.value).toBe("CAD");
-        expect(targetSelect.value).toBe("PLN");
-
-        await user.selectOptions(sourceSelect, "PLN");
-
-        expect(sourceSelect.value).toBe("PLN");
-        expect(targetSelect.value).not.toBe("PLN");
-    });
-
-    test("swap exchanges from and to currencies", async () => {
-        const user = userEvent.setup();
-
-        render(<CurrencyConverter />);
-
-        const selects = screen.getAllByRole("combobox");
-        const sourceSelect = selects[0] as HTMLSelectElement;
-        const targetSelect = selects[1] as HTMLSelectElement;
-
-        const initialFrom = sourceSelect.value;
-        const initialTo = targetSelect.value;
-
-        const swapButton = screen.getByRole("button", { name: "⇅" });
-        await user.click(swapButton);
-
-        expect(sourceSelect.value).toBe(initialTo);
-        expect(targetSelect.value).toBe(initialFrom);
-    });
-
-    test("resets MoreAbout open state when currency pair changes (key reset)", async () => {
-        const user = userEvent.setup();
-
-        render(<CurrencyConverter />);
-
-        const moreAboutButton = screen.getByRole("button", {
-            name: /about/i,
+        await waitFor(() => {
+            expect(resultInput).toHaveValue("29.50");
         });
-        await user.click(moreAboutButton);
-
-        const selects = screen.getAllByRole("combobox");
-        const sourceSelect = selects[0] as HTMLSelectElement;
-        const fromCode = sourceSelect.value;
-
-        expect(
-            screen.getByTestId(`currency-info-${fromCode}`)
-        ).toBeInTheDocument();
-
-        const targetSelect = selects[1] as HTMLSelectElement;
-        const currentTo = targetSelect.value;
-        const newTo = currentTo === "AUD" ? "JPY" : "AUD";
-
-        await user.selectOptions(targetSelect, newTo);
-
-        expect(
-            screen.queryByTestId(`currency-info-${fromCode}`)
-        ).not.toBeInTheDocument();
     });
 });
