@@ -1,23 +1,23 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Domain.Repositories;
 
 namespace Infrastructure.Foundation.Repositories;
 
-public class EFReservationRepository : IReservationRepository
+public class EfReservationRepository : IReservationRepository
 {
     private readonly BookingDbContext _dbContext;
 
-    public EFReservationRepository( BookingDbContext dbContext )
+    public EfReservationRepository( BookingDbContext dbContext )
     {
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<Reservation> GetAllReservations()
+    public IReadOnlyList<Reservation> GetAll()
     {
         return _dbContext.Set<Reservation>().ToList();
     }
 
-    public Reservation GetReservationById( int id )
+    public Reservation GetById( int id )
     {
         return _dbContext.Set<Reservation>().FirstOrDefault( reservation => reservation.Id == id );
     }
@@ -50,7 +50,7 @@ public class EFReservationRepository : IReservationRepository
 
     public void Delete( int id )
     {
-        Reservation existingReservation = GetReservationById( id );
+        Reservation existingReservation = GetById( id );
         _dbContext.Set<Reservation>().Remove( existingReservation );
         _dbContext.SaveChanges();
     }

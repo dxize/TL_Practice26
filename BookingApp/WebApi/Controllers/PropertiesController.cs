@@ -19,7 +19,7 @@ public class PropertiesController : ControllerBase
     [HttpGet( "" )]
     public IActionResult GetProperties()
     {
-        IReadOnlyList<Property> properties = _propertyRepository.GetAllProperties();
+        IReadOnlyList<Property> properties = _propertyRepository.GetAll();
 
         List<PropertyResponse> response = properties.Select( property => new PropertyResponse
         {
@@ -38,7 +38,7 @@ public class PropertiesController : ControllerBase
     [HttpGet( "{id:int}" )]
     public IActionResult GetProperty( [FromRoute] int id )
     {
-        Property property = _propertyRepository.GetPropertyById( id );
+        Property property = _propertyRepository.GetById( id );
         if ( property is null )
         {
             return NotFound();
@@ -77,7 +77,7 @@ public class PropertiesController : ControllerBase
     [HttpPut( "{id:int}" )]
     public IActionResult ModifyProperty( [FromRoute] int id, [FromBody] ModifyPropertyRequest request )
     {
-        Property existingProperty = _propertyRepository.GetPropertyById( id );
+        Property existingProperty = _propertyRepository.GetById( id );
         if ( existingProperty is null )
         {
             return NotFound();

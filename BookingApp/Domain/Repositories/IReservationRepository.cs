@@ -1,12 +1,12 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 
 namespace Domain.Repositories;
 
 public interface IReservationRepository
 {
-    IReadOnlyList<Reservation> GetAllReservations();
+    IReadOnlyList<Reservation> GetAll();
 
-    Reservation GetReservationById( int id );
+    Reservation GetById( int id );
 
     IReadOnlyList<Reservation> GetActiveReservationsByRoomTypeAndDates(
         int roomTypeId,

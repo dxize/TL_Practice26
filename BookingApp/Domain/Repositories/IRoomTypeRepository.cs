@@ -1,14 +1,14 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 
 namespace Domain.Repositories;
 
 public interface IRoomTypeRepository
 {
-    IReadOnlyList<RoomType> GetAllRoomTypes();
+    IReadOnlyList<RoomType> GetAll();
 
     IReadOnlyList<RoomType> GetRoomTypesByPropertyId( int propertyId );
 
-    RoomType GetRoomTypeById( int id );
+    RoomType GetById( int id );
 
     void Save( RoomType roomType );
 

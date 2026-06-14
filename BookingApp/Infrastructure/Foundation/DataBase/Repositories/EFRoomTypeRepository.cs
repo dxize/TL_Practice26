@@ -1,18 +1,18 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Domain.Repositories;
 
 namespace Infrastructure.Foundation.Repositories;
 
-public class EFRoomTypeRepository : IRoomTypeRepository
+public class EfRoomTypeRepository : IRoomTypeRepository
 {
     private readonly BookingDbContext _dbContext;
 
-    public EFRoomTypeRepository( BookingDbContext dbContext )
+    public EfRoomTypeRepository( BookingDbContext dbContext )
     {
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<RoomType> GetAllRoomTypes()
+    public IReadOnlyList<RoomType> GetAll()
     {
         return _dbContext.Set<RoomType>().ToList();
     }
@@ -24,7 +24,7 @@ public class EFRoomTypeRepository : IRoomTypeRepository
             .ToList();
     }
 
-    public RoomType GetRoomTypeById( int id )
+    public RoomType GetById( int id )
     {
         return _dbContext.Set<RoomType>().FirstOrDefault( roomType => roomType.Id == id );
     }
@@ -37,14 +37,14 @@ public class EFRoomTypeRepository : IRoomTypeRepository
 
     public void Update( RoomType roomType )
     {
-        RoomType existingRoomType = GetRoomTypeById( roomType.Id );
+        RoomType existingRoomType = GetById( roomType.Id );
         existingRoomType.CopyFrom( roomType );
         _dbContext.SaveChanges();
     }
 
     public void Delete( int id )
     {
-        RoomType existingRoomType = GetRoomTypeById( id );
+        RoomType existingRoomType = GetById( id );
         _dbContext.Set<RoomType>().Remove( existingRoomType );
         _dbContext.SaveChanges();
     }

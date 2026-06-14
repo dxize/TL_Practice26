@@ -1,12 +1,12 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 
 namespace Domain.Repositories;
 
 public interface IPropertyRepository
 {
-    IReadOnlyList<Property> GetAllProperties();
+    IReadOnlyList<Property> GetAll();
 
-    Property GetPropertyById( int id );
+    Property GetById( int id );
 
     void Save( Property property );
 

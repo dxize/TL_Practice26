@@ -12,9 +12,9 @@ builder.Services.AddDbContext<BookingDbContext>( options =>
         b => b.MigrationsAssembly( "Infrastructure.Migrations" ) );
 } );
 
-builder.Services.AddScoped<IPropertyRepository, EFPropertyRepository>();
-builder.Services.AddScoped<IRoomTypeRepository, EFRoomTypeRepository>();
-builder.Services.AddScoped<IReservationRepository, EFReservationRepository>();
+builder.Services.AddScoped<IPropertyRepository, EfPropertyRepository>();
+builder.Services.AddScoped<IRoomTypeRepository, EfRoomTypeRepository>();
+builder.Services.AddScoped<IReservationRepository, EfReservationRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

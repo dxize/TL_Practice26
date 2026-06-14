@@ -21,7 +21,7 @@ public class RoomTypesController : ControllerBase
     [HttpGet( "properties/{propertyId:int}/roomtypes" )]
     public IActionResult GetRoomTypesByProperty( [FromRoute] int propertyId )
     {
-        Property property = _propertyRepository.GetPropertyById( propertyId );
+        Property property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {
             return NotFound();
@@ -49,7 +49,7 @@ public class RoomTypesController : ControllerBase
     [HttpGet( "roomtypes/{id:int}" )]
     public IActionResult GetRoomType( [FromRoute] int id )
     {
-        RoomType roomType = _roomTypeRepository.GetRoomTypeById( id );
+        RoomType roomType = _roomTypeRepository.GetById( id );
         if ( roomType is null )
         {
             return NotFound();
@@ -75,7 +75,7 @@ public class RoomTypesController : ControllerBase
     [HttpPost( "properties/{propertyId:int}/roomtypes" )]
     public IActionResult CreateRoomType( [FromRoute] int propertyId, [FromBody] CreateRoomTypeRequest request )
     {
-        Property property = _propertyRepository.GetPropertyById( propertyId );
+        Property property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {
             return NotFound();
@@ -100,7 +100,7 @@ public class RoomTypesController : ControllerBase
     [HttpPut( "roomtypes/{id:int}" )]
     public IActionResult ModifyRoomType( [FromRoute] int id, [FromBody] ModifyRoomTypeRequest request )
     {
-        RoomType existingRoomType = _roomTypeRepository.GetRoomTypeById( id );
+        RoomType existingRoomType = _roomTypeRepository.GetById( id );
         if ( existingRoomType is null )
         {
             return NotFound();

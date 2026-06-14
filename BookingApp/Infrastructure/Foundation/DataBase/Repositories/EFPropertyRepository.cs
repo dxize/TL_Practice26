@@ -1,23 +1,23 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Domain.Repositories;
 
 namespace Infrastructure.Foundation.Repositories;
 
-public class EFPropertyRepository : IPropertyRepository
+public class EfPropertyRepository : IPropertyRepository
 {
     private readonly BookingDbContext _dbContext;
 
-    public EFPropertyRepository( BookingDbContext dbContext )
+    public EfPropertyRepository( BookingDbContext dbContext )
     {
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<Property> GetAllProperties()
+    public IReadOnlyList<Property> GetAll()
     {
         return _dbContext.Set<Property>().ToList();
     }
 
-    public Property GetPropertyById( int id )
+    public Property GetById( int id )
     {
         return _dbContext.Set<Property>().FirstOrDefault( property => property.Id == id );
     }
@@ -30,14 +30,14 @@ public class EFPropertyRepository : IPropertyRepository
 
     public void Update( Property property )
     {
-        Property existingProperty = GetPropertyById( property.Id );
+        Property existingProperty = GetById( property.Id );
         existingProperty.CopyFrom( property );
         _dbContext.SaveChanges();
     }
 
     public void Delete( int id )
     {
-        Property existingProperty = GetPropertyById( id );
+        Property existingProperty = GetById( id );
         _dbContext.Set<Property>().Remove( existingProperty );
         _dbContext.SaveChanges();
     }

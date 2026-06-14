@@ -36,7 +36,7 @@ public class SearchController : ControllerBase
             return BadRequest( "Дата заезда должна быть раньше даты выезда." );
         }
 
-        IReadOnlyList<Property> properties = _propertyRepository.GetAllProperties();
+        IReadOnlyList<Property> properties = _propertyRepository.GetAll();
         List<Property> filteredProperties = properties
             .Where( property => property.City.Equals( city, StringComparison.OrdinalIgnoreCase ) )
             .ToList();

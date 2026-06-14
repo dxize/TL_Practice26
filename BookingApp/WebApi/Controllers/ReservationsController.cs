@@ -30,7 +30,7 @@ public class ReservationsController : ControllerBase
         [FromQuery] DateTime? dateFrom,
         [FromQuery] DateTime? dateTo )
     {
-        IReadOnlyList<Reservation> reservations = _reservationRepository.GetAllReservations();
+        IReadOnlyList<Reservation> reservations = _reservationRepository.GetAll();
 
         IEnumerable<Reservation> filtered = reservations;
 
@@ -77,7 +77,7 @@ public class ReservationsController : ControllerBase
     [HttpGet( "{id:int}" )]
     public IActionResult GetReservation( [FromRoute] int id )
     {
-        Reservation reservation = _reservationRepository.GetReservationById( id );
+        Reservation reservation = _reservationRepository.GetById( id );
         if ( reservation is null )
         {
             return NotFound();
@@ -111,13 +111,13 @@ public class ReservationsController : ControllerBase
             return BadRequest( "Дата заезда должна быть раньше даты выезда." );
         }
 
-        Property property = _propertyRepository.GetPropertyById( request.PropertyId );
+        Property property = _propertyRepository.GetById( request.PropertyId );
         if ( property is null )
         {
             return BadRequest( "Объект размещения не найден." );
         }
 
-        RoomType roomType = _roomTypeRepository.GetRoomTypeById( request.RoomTypeId );
+        RoomType roomType = _roomTypeRepository.GetById( request.RoomTypeId );
         if ( roomType is null )
         {
             return BadRequest( "Категория номера не найдена." );
@@ -166,7 +166,7 @@ public class ReservationsController : ControllerBase
     [HttpDelete( "{id:int}" )]
     public IActionResult CancelReservation( [FromRoute] int id )
     {
-        Reservation reservation = _reservationRepository.GetReservationById( id );
+        Reservation reservation = _reservationRepository.GetById( id );
         if ( reservation is null )
         {
             return NotFound();
