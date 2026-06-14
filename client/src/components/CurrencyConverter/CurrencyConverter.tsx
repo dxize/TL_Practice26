@@ -33,8 +33,9 @@ export const CurrencyConverter = () => {
 
     return (
         <div className={styles.body}>
+
             {toastError && <div className={styles.toast}>{toastError}</div>}
-            
+
             {fromCurrency && toCurrency && (
                 <HeaderCurrencyConverter
                     fromCurrency={fromCurrency}
