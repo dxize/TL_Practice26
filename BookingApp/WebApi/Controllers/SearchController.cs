@@ -1,5 +1,5 @@
 using Domain.Entities;
-using Domain.Repositories;
+using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +9,11 @@ namespace WebApi.Controllers;
 [Route( "api/search" )]
 public class SearchController : ControllerBase
 {
-    private readonly IPropertyRepository _propertyRepository;
-    private readonly IRoomTypeRepository _roomTypeRepository;
-    private readonly IReservationRepository _reservationRepository;
+    private readonly ISearchService _searchService;
 
-    public SearchController(
-        IPropertyRepository propertyRepository,
-        IRoomTypeRepository roomTypeRepository,
-        IReservationRepository reservationRepository )
+    public SearchController( ISearchService searchService )
     {
-        _propertyRepository = propertyRepository;
-        _roomTypeRepository = roomTypeRepository;
-        _reservationRepository = reservationRepository;
+        _searchService = searchService;
     }
 
     [HttpGet( "" )]
@@ -36,75 +29,36 @@ public class SearchController : ControllerBase
             return BadRequest( "Дата заезда должна быть раньше даты выезда." );
         }
 
-        IReadOnlyList<Property> properties = _propertyRepository.GetAll();
-        List<Property> filteredProperties = properties
-            .Where( property => property.City.Equals( city, StringComparison.OrdinalIgnoreCase ) )
-            .ToList();
+        IReadOnlyList<SearchResult> searchResults = _searchService.Search(
+            city, arrivalDate, departureDate, guests, maxPrice );
 
-        List<SearchResultResponse> results = new();
-
-        foreach ( Property property in filteredProperties )
+        List<SearchResultResponse> response = searchResults.Select( result => new SearchResultResponse
         {
-            IReadOnlyList<RoomType> roomTypes = _roomTypeRepository.GetRoomTypesByPropertyId( property.Id );
-
-            List<RoomTypeResponse> availableRoomTypes = new();
-
-            foreach ( RoomType roomType in roomTypes )
+            Property = new PropertyResponse
             {
-                if ( guests < roomType.MinPersonCount || guests > roomType.MaxPersonCount )
-                {
-                    continue;
-                }
-
-                if ( maxPrice.HasValue && roomType.DailyPrice > maxPrice.Value )
-                {
-                    continue;
-                }
-
-                IReadOnlyList<Reservation> overlappingReservations =
-                    _reservationRepository.GetActiveReservationsByRoomTypeAndDates(
-                        roomType.Id, arrivalDate, departureDate );
-
-                int occupiedRooms = overlappingReservations.Count;
-                if ( occupiedRooms >= roomType.TotalRooms )
-                {
-                    continue;
-                }
-
-                availableRoomTypes.Add( new RoomTypeResponse
-                {
-                    Id = roomType.Id,
-                    PropertyId = roomType.PropertyId,
-                    Name = roomType.Name,
-                    DailyPrice = roomType.DailyPrice,
-                    Currency = roomType.Currency,
-                    MinPersonCount = roomType.MinPersonCount,
-                    MaxPersonCount = roomType.MaxPersonCount,
-                    TotalRooms = roomType.TotalRooms,
-                    Services = roomType.Services,
-                    Amenities = roomType.Amenities
-                } );
-            }
-
-            if ( availableRoomTypes.Count > 0 )
+                Id = result.Property.Id,
+                Name = result.Property.Name,
+                Country = result.Property.Country,
+                City = result.Property.City,
+                Address = result.Property.Address,
+                Latitude = result.Property.Latitude,
+                Longitude = result.Property.Longitude
+            },
+            AvailableRoomTypes = result.AvailableRoomTypes.Select( roomType => new RoomTypeResponse
             {
-                results.Add( new SearchResultResponse
-                {
-                    Property = new PropertyResponse
-                    {
-                        Id = property.Id,
-                        Name = property.Name,
-                        Country = property.Country,
-                        City = property.City,
-                        Address = property.Address,
-                        Latitude = property.Latitude,
-                        Longitude = property.Longitude
-                    },
-                    AvailableRoomTypes = availableRoomTypes
-                } );
-            }
-        }
+                Id = roomType.Id,
+                PropertyId = roomType.PropertyId,
+                Name = roomType.Name,
+                DailyPrice = roomType.DailyPrice,
+                Currency = roomType.Currency,
+                MinPersonCount = roomType.MinPersonCount,
+                MaxPersonCount = roomType.MaxPersonCount,
+                TotalRooms = roomType.TotalRooms,
+                Services = roomType.Services,
+                Amenities = roomType.Amenities
+            } ).ToList()
+        } ).ToList();
 
-        return Ok( results );
+        return Ok( response );
     }
 }

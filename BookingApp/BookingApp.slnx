@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Domain/Domain.csproj" />
+  <Project Path="Application/Application.csproj" />
   <Project Path="Infrastructure.Migrations/Infrastructure.Migrations.csproj" Id="fe58ddfc-f7f9-41f4-ab8d-5da03a2bd8af" />
   <Project Path="Infrastructure/Infrastructure.csproj" Id="eb3dd3c0-5026-48bb-b2e5-42baa1810e32" />
   <Project Path="WebApi/WebApi.csproj" />

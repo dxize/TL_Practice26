@@ -37,15 +37,13 @@ public class EfRoomTypeRepository : IRoomTypeRepository
 
     public void Update( RoomType roomType )
     {
-        RoomType existingRoomType = GetById( roomType.Id );
-        existingRoomType.CopyFrom( roomType );
+        _dbContext.Set<RoomType>().Update( roomType );
         _dbContext.SaveChanges();
     }
 
-    public void Delete( int id )
+    public void Delete( RoomType roomType )
     {
-        RoomType existingRoomType = GetById( id );
-        _dbContext.Set<RoomType>().Remove( existingRoomType );
+        _dbContext.Set<RoomType>().Remove( roomType );
         _dbContext.SaveChanges();
     }
 }

@@ -12,5 +12,5 @@ public interface IPropertyRepository
 
     void Update( Property property );
 
-    void Delete( int id );
+    void Delete( Property property );
 }

@@ -1,5 +1,5 @@
 using Domain.Entities;
-using Domain.Repositories;
+using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +9,17 @@ namespace WebApi.Controllers;
 [Route( "api/properties" )]
 public class PropertiesController : ControllerBase
 {
-    private readonly IPropertyRepository _propertyRepository;
+    private readonly IPropertyService _propertyService;
 
-    public PropertiesController( IPropertyRepository propertyRepository )
+    public PropertiesController( IPropertyService propertyService )
     {
-        _propertyRepository = propertyRepository;
+        _propertyService = propertyService;
     }
 
     [HttpGet( "" )]
     public IActionResult GetProperties()
     {
-        IReadOnlyList<Property> properties = _propertyRepository.GetAll();
+        IReadOnlyList<Property> properties = _propertyService.GetAll();
 
         List<PropertyResponse> response = properties.Select( property => new PropertyResponse
         {
@@ -38,24 +38,27 @@ public class PropertiesController : ControllerBase
     [HttpGet( "{id:int}" )]
     public IActionResult GetProperty( [FromRoute] int id )
     {
-        Property property = _propertyRepository.GetById( id );
-        if ( property is null )
+        try
+        {
+            Property property = _propertyService.GetById( id );
+
+            PropertyResponse response = new()
+            {
+                Id = property.Id,
+                Name = property.Name,
+                Country = property.Country,
+                City = property.City,
+                Address = property.Address,
+                Latitude = property.Latitude,
+                Longitude = property.Longitude
+            };
+
+            return Ok( response );
+        }
+        catch ( KeyNotFoundException )
         {
             return NotFound();
         }
-
-        PropertyResponse response = new()
-        {
-            Id = property.Id,
-            Name = property.Name,
-            Country = property.Country,
-            City = property.City,
-            Address = property.Address,
-            Latitude = property.Latitude,
-            Longitude = property.Longitude
-        };
-
-        return Ok( response );
     }
 
     [HttpPost( "" )]
@@ -69,7 +72,7 @@ public class PropertiesController : ControllerBase
             request.Latitude,
             request.Longitude );
 
-        _propertyRepository.Save( property );
+        _propertyService.Create( property );
 
         return Ok();
     }
@@ -77,28 +80,36 @@ public class PropertiesController : ControllerBase
     [HttpPut( "{id:int}" )]
     public IActionResult ModifyProperty( [FromRoute] int id, [FromBody] ModifyPropertyRequest request )
     {
-        Property existingProperty = _propertyRepository.GetById( id );
-        if ( existingProperty is null )
+        try
+        {
+            _propertyService.Update( id, property =>
+            {
+                property.SetName( request.Name );
+                property.SetCountry( request.Country );
+                property.SetCity( request.City );
+                property.SetAddress( request.Address );
+                property.SetCoordinates( request.Latitude, request.Longitude );
+            } );
+
+            return Ok();
+        }
+        catch ( KeyNotFoundException )
         {
             return NotFound();
         }
-
-        existingProperty.SetName( request.Name );
-        existingProperty.SetCountry( request.Country );
-        existingProperty.SetCity( request.City );
-        existingProperty.SetAddress( request.Address );
-        existingProperty.SetCoordinates( request.Latitude, request.Longitude );
-
-        _propertyRepository.Update( existingProperty );
-
-        return Ok();
     }
 
     [HttpDelete( "{id:int}" )]
     public IActionResult DeleteProperty( [FromRoute] int id )
     {
-        _propertyRepository.Delete( id );
-
-        return Ok();
+        try
+        {
+            _propertyService.Delete( id );
+            return Ok();
+        }
+        catch ( KeyNotFoundException )
+        {
+            return NotFound();
+        }
     }
 }

@@ -48,10 +48,9 @@ public class EfReservationRepository : IReservationRepository
         _dbContext.SaveChanges();
     }
 
-    public void Delete( int id )
+    public void Delete( Reservation reservation )
     {
-        Reservation existingReservation = GetById( id );
-        _dbContext.Set<Reservation>().Remove( existingReservation );
+        _dbContext.Set<Reservation>().Remove( reservation );
         _dbContext.SaveChanges();
     }
 }

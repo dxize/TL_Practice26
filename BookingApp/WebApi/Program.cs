@@ -1,4 +1,6 @@
+using Application.Services;
 using Domain.Repositories;
+using Domain.Services;
 using Infrastructure.Foundation.Database;
 using Infrastructure.Foundation.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,11 @@ builder.Services.AddDbContext<BookingDbContext>( options =>
 builder.Services.AddScoped<IPropertyRepository, EfPropertyRepository>();
 builder.Services.AddScoped<IRoomTypeRepository, EfRoomTypeRepository>();
 builder.Services.AddScoped<IReservationRepository, EfReservationRepository>();
+
+builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

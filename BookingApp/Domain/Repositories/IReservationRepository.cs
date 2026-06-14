@@ -17,5 +17,5 @@ public interface IReservationRepository
 
     void Update( Reservation reservation );
 
-    void Delete( int id );
+    void Delete( Reservation reservation );
 }

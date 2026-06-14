@@ -14,5 +14,5 @@ public interface IRoomTypeRepository
 
     void Update( RoomType roomType );
 
-    void Delete( int id );
+    void Delete( RoomType roomType );
 }

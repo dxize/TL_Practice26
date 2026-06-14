@@ -30,15 +30,13 @@ public class EfPropertyRepository : IPropertyRepository
 
     public void Update( Property property )
     {
-        Property existingProperty = GetById( property.Id );
-        existingProperty.CopyFrom( property );
+        _dbContext.Set<Property>().Update( property );
         _dbContext.SaveChanges();
     }
 
-    public void Delete( int id )
+    public void Delete( Property property )
     {
-        Property existingProperty = GetById( id );
-        _dbContext.Set<Property>().Remove( existingProperty );
+        _dbContext.Set<Property>().Remove( property );
         _dbContext.SaveChanges();
     }
 }

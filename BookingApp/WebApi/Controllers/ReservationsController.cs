@@ -1,5 +1,5 @@
 using Domain.Entities;
-using Domain.Repositories;
+using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +9,11 @@ namespace WebApi.Controllers;
 [Route( "api/reservations" )]
 public class ReservationsController : ControllerBase
 {
-    private readonly IReservationRepository _reservationRepository;
-    private readonly IPropertyRepository _propertyRepository;
-    private readonly IRoomTypeRepository _roomTypeRepository;
+    private readonly IReservationService _reservationService;
 
-    public ReservationsController(
-        IReservationRepository reservationRepository,
-        IPropertyRepository propertyRepository,
-        IRoomTypeRepository roomTypeRepository )
+    public ReservationsController( IReservationService reservationService )
     {
-        _reservationRepository = reservationRepository;
-        _propertyRepository = propertyRepository;
-        _roomTypeRepository = roomTypeRepository;
+        _reservationService = reservationService;
     }
 
     [HttpGet( "" )]
@@ -30,31 +23,10 @@ public class ReservationsController : ControllerBase
         [FromQuery] DateTime? dateFrom,
         [FromQuery] DateTime? dateTo )
     {
-        IReadOnlyList<Reservation> reservations = _reservationRepository.GetAll();
+        IReadOnlyList<Reservation> reservations = _reservationService.GetAll(
+            propertyId, guestName, dateFrom, dateTo );
 
-        IEnumerable<Reservation> filtered = reservations;
-
-        if ( propertyId.HasValue )
-        {
-            filtered = filtered.Where( r => r.PropertyId == propertyId.Value );
-        }
-
-        if ( !string.IsNullOrWhiteSpace( guestName ) )
-        {
-            filtered = filtered.Where( r => r.GuestName.Contains( guestName, StringComparison.OrdinalIgnoreCase ) );
-        }
-
-        if ( dateFrom.HasValue )
-        {
-            filtered = filtered.Where( r => r.DepartureDate > dateFrom.Value );
-        }
-
-        if ( dateTo.HasValue )
-        {
-            filtered = filtered.Where( r => r.ArrivalDate < dateTo.Value );
-        }
-
-        List<ReservationResponse> response = filtered.Select( r => new ReservationResponse
+        List<ReservationResponse> response = reservations.Select( r => new ReservationResponse
         {
             Id = r.Id,
             PropertyId = r.PropertyId,
@@ -77,30 +49,33 @@ public class ReservationsController : ControllerBase
     [HttpGet( "{id:int}" )]
     public IActionResult GetReservation( [FromRoute] int id )
     {
-        Reservation reservation = _reservationRepository.GetById( id );
-        if ( reservation is null )
+        try
+        {
+            Reservation reservation = _reservationService.GetById( id );
+
+            ReservationResponse response = new()
+            {
+                Id = reservation.Id,
+                PropertyId = reservation.PropertyId,
+                RoomTypeId = reservation.RoomTypeId,
+                ArrivalDate = reservation.ArrivalDate,
+                DepartureDate = reservation.DepartureDate,
+                ArrivalTime = reservation.ArrivalTime,
+                DepartureTime = reservation.DepartureTime,
+                GuestName = reservation.GuestName,
+                GuestPhoneNumber = reservation.GuestPhoneNumber,
+                Guests = reservation.Guests,
+                Total = reservation.Total,
+                Currency = reservation.Currency,
+                IsCanceled = reservation.IsCanceled
+            };
+
+            return Ok( response );
+        }
+        catch ( KeyNotFoundException )
         {
             return NotFound();
         }
-
-        ReservationResponse response = new()
-        {
-            Id = reservation.Id,
-            PropertyId = reservation.PropertyId,
-            RoomTypeId = reservation.RoomTypeId,
-            ArrivalDate = reservation.ArrivalDate,
-            DepartureDate = reservation.DepartureDate,
-            ArrivalTime = reservation.ArrivalTime,
-            DepartureTime = reservation.DepartureTime,
-            GuestName = reservation.GuestName,
-            GuestPhoneNumber = reservation.GuestPhoneNumber,
-            Guests = reservation.Guests,
-            Total = reservation.Total,
-            Currency = reservation.Currency,
-            IsCanceled = reservation.IsCanceled
-        };
-
-        return Ok( response );
     }
 
     [HttpPost( "" )]
@@ -111,70 +86,42 @@ public class ReservationsController : ControllerBase
             return BadRequest( "Дата заезда должна быть раньше даты выезда." );
         }
 
-        Property property = _propertyRepository.GetById( request.PropertyId );
-        if ( property is null )
+        try
         {
-            return BadRequest( "Объект размещения не найден." );
-        }
+            Reservation reservation = new(
+                request.PropertyId,
+                request.RoomTypeId,
+                request.ArrivalDate,
+                request.DepartureDate,
+                request.ArrivalTime,
+                request.DepartureTime,
+                request.GuestName,
+                request.GuestPhoneNumber,
+                request.Guests,
+                0,
+                string.Empty );
 
-        RoomType roomType = _roomTypeRepository.GetById( request.RoomTypeId );
-        if ( roomType is null )
+            _reservationService.Create( reservation );
+
+            return Ok();
+        }
+        catch ( ArgumentException ex )
         {
-            return BadRequest( "Категория номера не найдена." );
+            return BadRequest( ex.Message );
         }
-
-        if ( roomType.PropertyId != request.PropertyId )
-        {
-            return BadRequest( "Категория номера не принадлежит указанному объекту размещения." );
-        }
-
-        if ( request.Guests < roomType.MinPersonCount || request.Guests > roomType.MaxPersonCount )
-        {
-            return BadRequest( $"Количество гостей должно быть от {roomType.MinPersonCount} до {roomType.MaxPersonCount}." );
-        }
-
-        IReadOnlyList<Reservation> overlappingReservations =
-            _reservationRepository.GetActiveReservationsByRoomTypeAndDates(
-                request.RoomTypeId, request.ArrivalDate, request.DepartureDate );
-
-        if ( overlappingReservations.Count >= roomType.TotalRooms )
-        {
-            return BadRequest( "Нет доступных номеров на указанный период." );
-        }
-
-        int nights = ( request.DepartureDate.Date - request.ArrivalDate.Date ).Days;
-        decimal total = roomType.DailyPrice * nights;
-
-        Reservation reservation = new(
-            request.PropertyId,
-            request.RoomTypeId,
-            request.ArrivalDate,
-            request.DepartureDate,
-            request.ArrivalTime,
-            request.DepartureTime,
-            request.GuestName,
-            request.GuestPhoneNumber,
-            request.Guests,
-            total,
-            roomType.Currency );
-
-        _reservationRepository.Save( reservation );
-
-        return Ok();
     }
 
     [HttpDelete( "{id:int}" )]
     public IActionResult CancelReservation( [FromRoute] int id )
     {
-        Reservation reservation = _reservationRepository.GetById( id );
-        if ( reservation is null )
+        try
+        {
+            _reservationService.Cancel( id );
+            return Ok();
+        }
+        catch ( KeyNotFoundException )
         {
             return NotFound();
         }
-
-        reservation.Cancel();
-        _reservationRepository.Update( reservation );
-
-        return Ok();
     }
 }
