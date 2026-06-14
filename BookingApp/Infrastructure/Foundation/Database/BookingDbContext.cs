@@ -1,7 +1,7 @@
-﻿using Infrastructure.Foundation.Configuration;
+using Infrastructure.Foundation.Database.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Foundation;
+namespace Infrastructure.Foundation.Database;
 
 public class BookingDbContext : DbContext
 {

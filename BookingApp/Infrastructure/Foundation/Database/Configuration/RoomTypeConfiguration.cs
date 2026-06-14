@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Foundation.Configuration;
+namespace Infrastructure.Foundation.Database.Configuration;
 
 internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
 {

@@ -1,6 +1,6 @@
 using Domain.Repositories;
-using Infrastructure.Foundation;
-using Infrastructure.Foundation.Repositories;
+using Infrastructure.Foundation.Database;
+using Infrastructure.Foundation.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );

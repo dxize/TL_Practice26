@@ -1,7 +1,7 @@
 using Domain.Entities;
 using Domain.Repositories;
 
-namespace Infrastructure.Foundation.Repositories;
+namespace Infrastructure.Foundation.Database.Repositories;
 
 public class EfPropertyRepository : IPropertyRepository
 {
