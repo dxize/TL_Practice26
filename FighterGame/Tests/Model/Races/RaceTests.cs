@@ -19,11 +19,11 @@ public class RaceTests
     private const int _negroidExpectedHealth = 110;
     private const int _negroidExpectedArmor = 1;
 
-    public static readonly object[][] RaceTestData =
+    public static readonly TheoryData<IRace, string, int, int, int> RaceTestData = new()
     {
-        new object[] { new AsianRace(), _asian, _asianExpectedDamage, _asianExpectedHealth, _asianExpectedArmor },
-        new object[] { new EuropeanRace(), _european, _europeanExpectedDamage, _europeanExpectedHealth, _europeanExpectedArmor },
-        new object[] { new NegroidRace(), _negroid, _negroidExpectedDamage, _negroidExpectedHealth, _negroidExpectedArmor }
+        { new AsianRace(), _asian, _asianExpectedDamage, _asianExpectedHealth, _asianExpectedArmor },
+        { new EuropeanRace(), _european, _europeanExpectedDamage, _europeanExpectedHealth, _europeanExpectedArmor },
+        { new NegroidRace(), _negroid, _negroidExpectedDamage, _negroidExpectedHealth, _negroidExpectedArmor }
     };
 
     [Theory]

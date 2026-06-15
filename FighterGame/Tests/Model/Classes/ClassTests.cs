@@ -19,11 +19,11 @@ public class ClassTests
     private const int _wolfExpectedHealth = 6;
     private const int _wolfExpectedArmor = 1;
 
-    public static readonly object[][] ClassTestData =
+    public static readonly TheoryData<IClass, string, int, int, int> ClassTestData = new()
     {
-        new object[] { new KnightClass(), _knight, _knightExpectedDamage, _knightExpectedHealth, _knightExpectedArmor },
-        new object[] { new PeasantClass(), _peasant, _peasantExpectedDamage, _peasantExpectedHealth, _peasantExpectedArmor },
-        new object[] { new WolfClass(), _wolf, _wolfExpectedDamage, _wolfExpectedHealth, _wolfExpectedArmor }
+        { new KnightClass(), _knight, _knightExpectedDamage, _knightExpectedHealth, _knightExpectedArmor },
+        { new PeasantClass(), _peasant, _peasantExpectedDamage, _peasantExpectedHealth, _peasantExpectedArmor },
+        { new WolfClass(), _wolf, _wolfExpectedDamage, _wolfExpectedHealth, _wolfExpectedArmor }
     };
 
     [Theory]

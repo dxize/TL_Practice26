@@ -13,11 +13,11 @@ public class WeaponTests
     private const string _handGun = "Пистолет";
     private const int _handGunExpectedDamage = 30;
 
-    public static readonly object[][] WeaponTestData =
+    public static readonly TheoryData<IWeapon, string, int> WeaponTestData = new()
     {
-        new object[] { new SwordWeapon(), _sword, _swordExpectedDamage },
-        new object[] { new SpearWeapon(), _spear, _spearExpectedDamage },
-        new object[] { new HandGunWeapon(), _handGun, _handGunExpectedDamage }
+        { new SwordWeapon(), _sword, _swordExpectedDamage },
+        { new SpearWeapon(), _spear, _spearExpectedDamage },
+        { new HandGunWeapon(), _handGun, _handGunExpectedDamage }
     };
 
     [Theory]

@@ -16,12 +16,12 @@ public class ArmorTests
     private const string _thirdArmorName = "Тяжёлая броня";
     private const int _thirdArmorExpectedArmor = 6;
 
-    public static readonly object[][] ArmorTestData =
+    public static readonly TheoryData<IArmor, string, int> ArmorTestData = new()
     {
-        new object[] { new NoArmor(), _noArmorName, _noArmorExpectedArmor },
-        new object[] { new FirstArmor(), _firstArmorName, _firstArmorExpectedArmor },
-        new object[] { new SecondArmor(), _secondArmorName, _secondArmorExpectedArmor },
-        new object[] { new ThirdArmor(), _thirdArmorName, _thirdArmorExpectedArmor }
+        { new NoArmor(), _noArmorName, _noArmorExpectedArmor },
+        { new FirstArmor(), _firstArmorName, _firstArmorExpectedArmor },
+        { new SecondArmor(), _secondArmorName, _secondArmorExpectedArmor },
+        { new ThirdArmor(), _thirdArmorName, _thirdArmorExpectedArmor }
     };
 
     [Theory]

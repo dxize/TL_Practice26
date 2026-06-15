@@ -94,11 +94,11 @@ public class FighterTests
         Assert.Equal( 18, fullArmor );
     }
 
-    public static readonly object[][] TakeDamageTestData =
+    public static readonly TheoryData<int, int> TakeDamageTestData = new()
     {
-        new object[] { 10, 140 },
-        new object[] { 50, 100 },
-        new object[] { 149, 1 }
+        { 10, 140 },
+        { 50, 100 },
+        { 149, 1 }
     };
 
     [Theory]
