@@ -3,12 +3,13 @@ import { useConverter } from "../../hooks/useConverter";
 import { HeaderCurrencyConverter } from "./components/HeaderCurrencyConverter/HeaderCurrencyConverter";
 import { InputCurrencyCoverter } from "./components/InputCurrencyCoverter/InputCurrencyCoverter";
 import { SwapButton } from "./components/SwapButton/SwapButton";
+import { RateChart } from "./components/RateChart/RateChart";
 import { MoreAboutCurrency } from "./components/MoreAboutCurrency/MoreAboutCurrency";
 import styles from "./CurrencyConverter.module.scss";
 
 export const CurrencyConverter = () => {
     const {
-        state: { amount, fromCode, toCode, currencies, isLoading, error, toastError, priceChange },
+        state: { amount, fromCode, toCode, currencies, isLoading, error },
         result,
         pairKey,
         fromCurrency,
@@ -17,6 +18,12 @@ export const CurrencyConverter = () => {
         handleFromChange,
         handleToChange,
         swap,
+        latestPrice,
+        chartData,
+        chartLoading,
+        chartError,
+        periodMinutes,
+        setPeriodMinutes,
     } = useConverter();
 
     if (isLoading && currencies.length === 0) {
@@ -34,27 +41,26 @@ export const CurrencyConverter = () => {
     return (
         <div className={styles.body}>
 
-            {toastError && <div className={styles.toast}>{toastError}</div>}
-
             {fromCurrency && toCurrency && (
                 <HeaderCurrencyConverter
                     fromCurrency={fromCurrency}
                     toCurrency={toCurrency}
-                    priceChange={priceChange}
+                    priceChange={latestPrice}
                 />
             )}
 
             <div className={styles.converterRow}>
-                <SwapButton onClick={swap} />
-
                 <div className={styles.inputsColumn}>
-                    <InputCurrencyCoverter
-                        value={amount}
-                        onValueChange={setAmount}
-                        currencies={currencies}
-                        selectedCode={fromCode}
-                        onCurrencyChange={handleFromChange}
-                    />
+                    <div className={styles.inputWithSwap}>
+                        <InputCurrencyCoverter
+                            value={amount}
+                            onValueChange={setAmount}
+                            currencies={currencies}
+                            selectedCode={fromCode}
+                            onCurrencyChange={handleFromChange}
+                        />
+                        <SwapButton onClick={swap} />
+                    </div>
 
                     <InputCurrencyCoverter
                         value={result}
@@ -62,6 +68,16 @@ export const CurrencyConverter = () => {
                         selectedCode={toCode}
                         onCurrencyChange={handleToChange}
                         readOnly
+                    />
+                </div>
+
+                <div className={styles.chartColumn}>
+                    <RateChart
+                        chartData={chartData}
+                        chartLoading={chartLoading}
+                        chartError={chartError}
+                        periodMinutes={periodMinutes}
+                        onPeriodChange={setPeriodMinutes}
                     />
                 </div>
             </div>

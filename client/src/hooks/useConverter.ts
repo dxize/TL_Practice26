@@ -1,13 +1,14 @@
-import { useReducer, useEffect } from "react";
-import type { Currency, PriceChange } from "../models";
-import { fetchCurrencies, fetchPriceChange } from "../api/apiClient";
+import { useReducer, useEffect, useState } from "react";
+import type { Currency } from "../models";
+import { fetchCurrencies } from "../api/apiClient";
+import { usePriceChart } from "./usePriceChart";
+
+const DEFAULT_PERIOD_MINUTES = 5;
 
 export type ConverterState = {
     currencies: Currency[];
-    priceChange: PriceChange | null;
     isLoading: boolean;
     error: string | null;
-    toastError: string | null;
     fromCode: string;
     toCode: string;
     amount: string;
@@ -17,9 +18,6 @@ type Action =
     | { type: "FETCH_CURRENCIES_START" }
     | { type: "FETCH_CURRENCIES_SUCCESS"; payload: Currency[] }
     | { type: "FETCH_CURRENCIES_ERROR"; payload: string }
-    | { type: "FETCH_PRICE_START" }
-    | { type: "FETCH_PRICE_SUCCESS"; payload: PriceChange }
-    | { type: "FETCH_PRICE_ERROR"; payload: string }
     | { type: "SET_AMOUNT"; payload: string }
     | { type: "SET_FROM_CODE"; payload: string }
     | { type: "SET_TO_CODE"; payload: string }
@@ -27,10 +25,8 @@ type Action =
 
 const initialState: ConverterState = {
     currencies: [],
-    priceChange: null,
     isLoading: true,
     error: null,
-    toastError: null,
     fromCode: "",
     toCode: "",
     amount: "1",
@@ -55,13 +51,6 @@ const converterReducer = (state: ConverterState, action: Action): ConverterState
             };
         case "FETCH_CURRENCIES_ERROR":
             return { ...state, isLoading: false, error: action.payload };
-
-        case "FETCH_PRICE_START":
-            return { ...state, toastError: null };
-        case "FETCH_PRICE_SUCCESS":
-            return { ...state, priceChange: action.payload, toastError: null };
-        case "FETCH_PRICE_ERROR":
-            return { ...state, toastError: action.payload };
 
         case "SET_AMOUNT":
             return { ...state, amount: action.payload };
@@ -94,20 +83,27 @@ const converterReducer = (state: ConverterState, action: Action): ConverterState
 
 export const useConverter = () => {
     const [state, dispatch] = useReducer(converterReducer, initialState);
+    const [periodMinutes, setPeriodMinutes] = useState(DEFAULT_PERIOD_MINUTES);
 
+    /*
+     * useEffect #1: загрузка списка валют (один раз при маунте).
+     * Это настоящий side effect — запрос к API.
+     * Cleanup: AbortController отменяет запрос при размонтировании.
+     */
     useEffect(() => {
-        let isMounted = true;
+        const controller = new AbortController();
 
         const loadCurrencies = async () => {
             dispatch({ type: "FETCH_CURRENCIES_START" });
             try {
-                const data = await fetchCurrencies();
-                if (isMounted) {
+                const data = await fetchCurrencies(controller.signal);
+                if (!controller.signal.aborted) {
                     dispatch({ type: "FETCH_CURRENCIES_SUCCESS", payload: data });
                 }
-            } catch (err: any) {
-                if (isMounted) {
-                    dispatch({ type: "FETCH_CURRENCIES_ERROR", payload: err.message });
+            } catch (err: unknown) {
+                if (!controller.signal.aborted) {
+                    const message = err instanceof Error ? err.message : "Unknown error";
+                    dispatch({ type: "FETCH_CURRENCIES_ERROR", payload: message });
                 }
             }
         };
@@ -115,46 +111,37 @@ export const useConverter = () => {
         loadCurrencies();
 
         return () => {
-            isMounted = false;
+            controller.abort();
         };
     }, []);
 
-    useEffect(() => {
-        let isMounted = true;
-
-        if (!state.fromCode || !state.toCode) return;
-
-        const loadPrice = async () => {
-            dispatch({ type: "FETCH_PRICE_START" });
-            try {
-                const data = await fetchPriceChange(state.fromCode, state.toCode);
-                if (isMounted) {
-                    dispatch({ type: "FETCH_PRICE_SUCCESS", payload: data });
-                }
-            } catch (err: any) {
-                if (isMounted) {
-                    dispatch({ type: "FETCH_PRICE_ERROR", payload: err.message });
-                }
-            }
-        };
-
-        loadPrice();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [state.fromCode, state.toCode]);
+    /*
+     * useEffect #2 (внутри usePriceChart): загрузка и автообновление графика.
+     * Зависимости: [fromCode, toCode, periodMinutes].
+     * Cleanup: AbortController + clearInterval.
+     */
+    const { chartData, chartLoading, chartError, latestPrice } = usePriceChart(
+        state.fromCode,
+        state.toCode,
+        periodMinutes
+    );
 
     const setAmount = (val: string) => dispatch({ type: "SET_AMOUNT", payload: val });
     const handleFromChange = (code: string) => dispatch({ type: "SET_FROM_CODE", payload: code });
     const handleToChange = (code: string) => dispatch({ type: "SET_TO_CODE", payload: code });
     const swap = () => dispatch({ type: "SWAP" });
 
+    /*
+     * Синхронные вычисления — НЕ используют useEffect:
+     * - result: пересчёт суммы конвертации
+     * - fromCurrency / toCurrency: поиск валюты по коду
+     * - pairKey: ключ для MoreAboutCurrency
+     */
     const numericAmount = parseFloat(state.amount.replace(",", "."));
     const result =
-        isNaN(numericAmount) || !state.priceChange
+        isNaN(numericAmount) || !latestPrice
             ? ""
-            : (numericAmount * state.priceChange.price).toFixed(2);
+            : (numericAmount * latestPrice.price).toFixed(2);
 
     const fromCurrency = state.currencies.find((c) => c.code === state.fromCode) ?? null;
     const toCurrency = state.currencies.find((c) => c.code === state.toCode) ?? null;
@@ -171,6 +158,12 @@ export const useConverter = () => {
         handleFromChange,
         handleToChange,
         swap,
+        latestPrice,
+        chartData,
+        chartLoading,
+        chartError,
+        periodMinutes,
+        setPeriodMinutes,
     };
 };
 

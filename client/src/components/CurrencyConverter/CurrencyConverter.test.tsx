@@ -5,9 +5,19 @@ import { CurrencyConverter } from "./CurrencyConverter";
 import * as apiClient from "../../api/apiClient";
 import type { Currency, PriceChange } from "../../models";
 
+vi.mock("recharts", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("recharts")>();
+    return {
+        ...actual,
+        ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
+            <div data-testid="responsive-container">{children}</div>
+        ),
+    };
+});
+
 vi.mock("../../api/apiClient", () => ({
     fetchCurrencies: vi.fn(),
-    fetchPriceChange: vi.fn(),
+    fetchPriceHistory: vi.fn(),
 }));
 
 const mockCurrencies: Currency[] = [
@@ -16,12 +26,20 @@ const mockCurrencies: Currency[] = [
     { code: "AUD", name: "Australian Dollar", description: "", symbol: "$" },
 ];
 
-const mockPriceChange: PriceChange = {
-    toCurrencyCode: "PLN",
-    fromCurrencyCode: "CAD",
-    price: 2.95,
-    dateTime: "2026-05-21T03:40:54Z"
-};
+const mockPriceHistory: PriceChange[] = [
+    {
+        toCurrencyCode: "PLN",
+        fromCurrencyCode: "CAD",
+        price: 2.90,
+        dateTime: "2026-05-21T03:40:44Z",
+    },
+    {
+        toCurrencyCode: "PLN",
+        fromCurrencyCode: "CAD",
+        price: 2.95,
+        dateTime: "2026-05-21T03:40:54Z",
+    },
+];
 
 describe("CurrencyConverter UI States", () => {
     beforeEach(() => {
@@ -48,7 +66,7 @@ describe("CurrencyConverter UI States", () => {
 
     test("shows success state and elements after data load", async () => {
         vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceChange).mockResolvedValue(mockPriceChange);
+        vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockPriceHistory);
 
         render(<CurrencyConverter />);
 
@@ -60,20 +78,22 @@ describe("CurrencyConverter UI States", () => {
         expect(selects).toHaveLength(2);
     });
 
-    test("shows toast error if fetchPriceChange fails", async () => {
+    test("shows chart error if fetchPriceHistory fails on first load", async () => {
         vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceChange).mockRejectedValue(new Error("Failed to fetch price"));
+        vi.mocked(apiClient.fetchPriceHistory).mockRejectedValue(
+            new Error("Failed to fetch price history")
+        );
 
         render(<CurrencyConverter />);
 
         await waitFor(() => {
-            expect(screen.getByText("Failed to fetch price")).toBeInTheDocument();
+            expect(screen.getByText("Failed to fetch price history")).toBeInTheDocument();
         });
     });
 
     test("calculates result when user types amount", async () => {
         vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceChange).mockResolvedValue(mockPriceChange);
+        vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockPriceHistory);
         const user = userEvent.setup();
 
         render(<CurrencyConverter />);
@@ -91,5 +111,22 @@ describe("CurrencyConverter UI States", () => {
         await waitFor(() => {
             expect(resultInput).toHaveValue("29.50");
         });
+    });
+
+    test("shows period switcher buttons", async () => {
+        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
+        vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockPriceHistory);
+
+        render(<CurrencyConverter />);
+
+        await waitFor(() => {
+            expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+        });
+
+        expect(screen.getByText("5 MIN")).toBeInTheDocument();
+        expect(screen.getByText("4 MIN")).toBeInTheDocument();
+        expect(screen.getByText("3 MIN")).toBeInTheDocument();
+        expect(screen.getByText("2 MIN")).toBeInTheDocument();
+        expect(screen.getByText("1 MIN")).toBeInTheDocument();
     });
 });

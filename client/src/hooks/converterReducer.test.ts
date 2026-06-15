@@ -40,4 +40,43 @@ describe('converterReducer', () => {
         expect(nextState.isLoading).toBe(false);
         expect(nextState.error).toBe('Network Error');
     });
+
+    test('swaps currency codes on SWAP', () => {
+        const state: ConverterState = {
+            ...initialState,
+            fromCode: 'USD',
+            toCode: 'EUR',
+        };
+
+        const nextState = converterReducer(state, { type: 'SWAP' });
+
+        expect(nextState.fromCode).toBe('EUR');
+        expect(nextState.toCode).toBe('USD');
+    });
+
+    test('sets amount on SET_AMOUNT', () => {
+        const nextState = converterReducer(initialState, {
+            type: 'SET_AMOUNT',
+            payload: '42',
+        });
+
+        expect(nextState.amount).toBe('42');
+    });
+
+    test('prevents same from/to on SET_FROM_CODE', () => {
+        const state: ConverterState = {
+            ...initialState,
+            currencies: mockCurrencies,
+            fromCode: 'USD',
+            toCode: 'EUR',
+        };
+
+        const nextState = converterReducer(state, {
+            type: 'SET_FROM_CODE',
+            payload: 'EUR',
+        });
+
+        expect(nextState.fromCode).toBe('EUR');
+        expect(nextState.toCode).toBe('USD');
+    });
 });
