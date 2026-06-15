@@ -1,43 +1,34 @@
-﻿using FighterGame.Model.Weapons;
+using FighterGame.Model.Weapons;
 
 namespace Tests.Model.Weapons;
 
 public class WeaponTests
 {
-    private const string Sword = "Sword";
-    private const int SwordExpectedDamage = 10;
+    private const string _sword = "Меч";
+    private const int _swordExpectedDamage = 10;
 
-    private const string Spear = "Spear";
-    private const int SpearExpectedDamage = 15;
+    private const string _spear = "Копьё";
+    private const int _spearExpectedDamage = 15;
 
-    private const string HandGun = "HandGun";
-    private const int HandGunExpectedDamage = 30;
+    private const string _handGun = "Пистолет";
+    private const int _handGunExpectedDamage = 30;
+
+    public static readonly object[][] WeaponTestData =
+    {
+        new object[] { new SwordWeapon(), _sword, _swordExpectedDamage },
+        new object[] { new SpearWeapon(), _spear, _spearExpectedDamage },
+        new object[] { new HandGunWeapon(), _handGun, _handGunExpectedDamage }
+    };
 
     [Theory]
-    [InlineData( Sword, SwordExpectedDamage )]
-    [InlineData( Spear, SpearExpectedDamage )]
-    [InlineData( HandGun, HandGunExpectedDamage )]
-    public void Constructor_WhenWeaponCreated_HasExpectedDamage(
-        string weaponName,
+    [MemberData( nameof( WeaponTestData ) )]
+    public void Constructor_WhenWeaponCreated_HasExpectedStats(
+        IWeapon weapon,
+        string expectedName,
         int expectedDamage )
     {
-        // Arrange
-        IWeapon weapon;
-
-        if ( weaponName == Sword )
-        {
-            weapon = new SwordWeapon();
-        }
-        else if ( weaponName == Spear )
-        {
-            weapon = new SpearWeapon();
-        }
-        else
-        {
-            weapon = new HandGunWeapon();
-        }
-
         // Assert
         Assert.Equal( expectedDamage, weapon.Damage );
+        Assert.Equal( expectedName, weapon.Name );
     }
 }

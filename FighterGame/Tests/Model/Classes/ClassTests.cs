@@ -1,53 +1,44 @@
-﻿using FighterGame.Model.Classes;
+using FighterGame.Model.Classes;
 
 namespace Tests.Model.Classes;
 
 public class ClassTests
 {
-    private const string Knight = "Knight";
-    private const int KnightExpectedDamage = 8;
-    private const int KnightExpectedHealth = 5;
-    private const int KnightExpectedArmor = 5;
+    private const string _knight = "Рыцарь";
+    private const int _knightExpectedDamage = 8;
+    private const int _knightExpectedHealth = 5;
+    private const int _knightExpectedArmor = 5;
 
-    private const string Peasant = "Peasant";
-    private const int PeasantExpectedDamage = 6;
-    private const int PeasantExpectedHealth = 2;
-    private const int PeasantExpectedArmor = 2;
+    private const string _peasant = "Крестьянин";
+    private const int _peasantExpectedDamage = 6;
+    private const int _peasantExpectedHealth = 2;
+    private const int _peasantExpectedArmor = 2;
 
-    private const string Wolf = "Wolf";
-    private const int WolfExpectedDamage = 10;
-    private const int WolfExpectedHealth = 6;
-    private const int WolfExpectedArmor = 1;
+    private const string _wolf = "Волк";
+    private const int _wolfExpectedDamage = 10;
+    private const int _wolfExpectedHealth = 6;
+    private const int _wolfExpectedArmor = 1;
+
+    public static readonly object[][] ClassTestData =
+    {
+        new object[] { new KnightClass(), _knight, _knightExpectedDamage, _knightExpectedHealth, _knightExpectedArmor },
+        new object[] { new PeasantClass(), _peasant, _peasantExpectedDamage, _peasantExpectedHealth, _peasantExpectedArmor },
+        new object[] { new WolfClass(), _wolf, _wolfExpectedDamage, _wolfExpectedHealth, _wolfExpectedArmor }
+    };
 
     [Theory]
-    [InlineData( Knight, KnightExpectedDamage, KnightExpectedHealth, KnightExpectedArmor )]
-    [InlineData( Peasant, PeasantExpectedDamage, PeasantExpectedHealth, PeasantExpectedArmor )]
-    [InlineData( Wolf, WolfExpectedDamage, WolfExpectedHealth, WolfExpectedArmor )]
+    [MemberData( nameof( ClassTestData ) )]
     public void Constructor_WhenClassCreated_HasExpectedStats(
-        string className,
+        IClass classType,
+        string expectedName,
         int expectedDamage,
         int expectedHealth,
         int expectedArmor )
     {
-        // Arrange
-        IClass classType;
-
-        if ( className == Knight )
-        {
-            classType = new KnightClass();
-        }
-        else if ( className == Peasant )
-        {
-            classType = new PeasantClass();
-        }
-        else
-        {
-            classType = new WolfClass();
-        }
-
         // Assert
         Assert.Equal( expectedDamage, classType.Damage );
         Assert.Equal( expectedHealth, classType.Health );
         Assert.Equal( expectedArmor, classType.Armor );
+        Assert.Equal( expectedName, classType.Name );
     }
 }

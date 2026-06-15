@@ -1,5 +1,9 @@
-﻿using FighterGame;
+using FighterGame;
 using FighterGame.Model;
+using FighterGame.Model.Armors;
+using FighterGame.Model.Classes;
+using FighterGame.Model.Races;
+using FighterGame.Model.Weapons;
 using Moq;
 
 namespace Tests;
@@ -24,92 +28,43 @@ public class GameManagerTests
     public void StartBattle_WhenOnlyOneFighterExists_DoesNotAttack()
     {
         // Arrange
-        Mock<IFighter> fighterMock = CreateFighterMock(
-            name: "Fighter 1",
-            health: 100,
-            fullDamage: 50,
-            fullArmor: 0,
-            initiative: 10,
-            isAlive: true
-        );
+        Fighter fighter = CreateFighter( "Fighter 1", raceHealth: 50, classHealth: 50 );
 
-        List<IFighter> fighters = [ fighterMock.Object ];
+        List<IFighter> fighters = [ fighter ];
         GameManager gameManager = new( fighters );
 
         // Act
         gameManager.StartBattle();
 
         // Assert
-        fighterMock.Verify( f => f.TakeDamage( It.IsAny<int>() ), Times.Never );
+        Assert.Equal( 100, fighter.Health );
     }
 
     [Fact]
     public void StartBattle_WhenTwoFightersExist_TargetTakesDamage()
     {
         // Arrange
-        bool defenderAlive = true;
+        Fighter megaFighter = CreateFighter( "Mega", weaponDamage: 1000 );
+        Fighter weakFighter = CreateFighter( "Weak", raceHealth: 1, classHealth: 0 );
 
-        Mock<IFighter> attackerMock = CreateFighterMock(
-            name: "Attacker",
-            health: 100,
-            fullDamage: 100,
-            fullArmor: 0,
-            initiative: 20,
-            isAlive: true
-        );
-
-        Mock<IFighter> defenderMock = CreateFighterMock(
-            name: "Defender",
-            health: 100,
-            fullDamage: 10,
-            fullArmor: 0,
-            initiative: 10,
-            isAliveGetter: () => defenderAlive
-        );
-
-        defenderMock
-            .Setup( f => f.TakeDamage( It.IsAny<int>() ) )
-            .Callback( () => defenderAlive = false );
-
-        List<IFighter> fighters = [ attackerMock.Object, defenderMock.Object ];
+        List<IFighter> fighters = [ megaFighter, weakFighter ];
         GameManager gameManager = new( fighters );
 
         // Act
         gameManager.StartBattle();
 
         // Assert
-        defenderMock.Verify( f => f.TakeDamage( It.IsAny<int>() ), Times.Once );
+        Assert.False( weakFighter.IsAlive );
     }
 
     [Fact]
     public void StartBattle_WhenTwoFightersExist_RemovesDeadFighter()
     {
         // Arrange
-        bool defenderAlive = true;
+        Fighter megaFighter = CreateFighter( "Mega", weaponDamage: 1000 );
+        Fighter weakFighter = CreateFighter( "Weak", raceHealth: 1, classHealth: 0 );
 
-        Mock<IFighter> attackerMock = CreateFighterMock(
-            name: "Attacker",
-            health: 100,
-            fullDamage: 100,
-            fullArmor: 0,
-            initiative: 20,
-            isAlive: true
-        );
-
-        Mock<IFighter> defenderMock = CreateFighterMock(
-            name: "Defender",
-            health: 100,
-            fullDamage: 10,
-            fullArmor: 0,
-            initiative: 10,
-            isAliveGetter: () => defenderAlive
-        );
-
-        defenderMock
-            .Setup( f => f.TakeDamage( It.IsAny<int>() ) )
-            .Callback( () => defenderAlive = false );
-
-        List<IFighter> fighters = [ attackerMock.Object, defenderMock.Object ];
+        List<IFighter> fighters = [ megaFighter, weakFighter ];
         GameManager gameManager = new( fighters );
 
         // Act
@@ -117,90 +72,123 @@ public class GameManagerTests
 
         // Assert
         Assert.Single( fighters );
-        Assert.Contains( attackerMock.Object, fighters );
+        Assert.Contains( megaFighter, fighters );
     }
 
     [Fact]
     public void StartBattle_WhenFighterHasHigherInitiative_AttacksFirst()
     {
         // Arrange
-        bool lowInitiativeFighterAlive = true;
+        Fighter fastFighter;
+        Fighter slowFighter;
 
-        Mock<IFighter> highInitiativeFighterMock = CreateFighterMock(
-            name: "Fast Fighter",
-            health: 100,
-            fullDamage: 100,
-            fullArmor: 0,
-            initiative: 20,
-            isAlive: true
-        );
+        do
+        {
+            fastFighter = CreateFighter( "Fast Mega", weaponDamage: 1000, raceHealth: 50, classHealth: 50 );
+            slowFighter = CreateFighter( "Slow Mega", weaponDamage: 1000, raceHealth: 50, classHealth: 50 );
+        }
+        while ( fastFighter.Initiative <= slowFighter.Initiative );
 
-        Mock<IFighter> lowInitiativeFighterMock = CreateFighterMock(
-            name: "Slow Fighter",
-            health: 100,
-            fullDamage: 100,
-            fullArmor: 0,
-            initiative: 5,
-            isAliveGetter: () => lowInitiativeFighterAlive
-        );
-
-        lowInitiativeFighterMock
-            .Setup( f => f.TakeDamage( It.IsAny<int>() ) )
-            .Callback( () => lowInitiativeFighterAlive = false );
-
-        List<IFighter> fighters =
-        [
-            lowInitiativeFighterMock.Object,
-            highInitiativeFighterMock.Object
-        ];
-
+        List<IFighter> fighters = [ slowFighter, fastFighter ];
         GameManager gameManager = new( fighters );
 
         // Act
         gameManager.StartBattle();
 
         // Assert
-        lowInitiativeFighterMock.Verify( f => f.TakeDamage( It.IsAny<int>() ), Times.Once );
-        highInitiativeFighterMock.Verify( f => f.TakeDamage( It.IsAny<int>() ), Times.Never );
+        Assert.False( slowFighter.IsAlive );
+        Assert.Equal( 100, fastFighter.Health );
     }
 
-    private static Mock<IFighter> CreateFighterMock(
-        string name,
-        int health,
-        int fullDamage,
-        int fullArmor,
-        int initiative,
-        bool isAlive )
+    [Fact]
+    public void StartBattle_WhenMoreThanTwoFightersExist_BattleResolvesToOneWinner()
     {
-        Mock<IFighter> mock = new();
+        // Arrange
+        Fighter f1 = CreateFighter( "Fighter 1", weaponDamage: 1000, raceHealth: 10, classHealth: 0 );
+        Fighter f2 = CreateFighter( "Fighter 2", weaponDamage: 1000, raceHealth: 10, classHealth: 0 );
+        Fighter f3 = CreateFighter( "Fighter 3", weaponDamage: 1000, raceHealth: 10, classHealth: 0 );
 
-        mock.Setup( f => f.Name ).Returns( name );
-        mock.Setup( f => f.Health ).Returns( health );
-        mock.Setup( f => f.FullDamage ).Returns( fullDamage );
-        mock.Setup( f => f.FullArmor ).Returns( fullArmor );
-        mock.Setup( f => f.Initiative ).Returns( initiative );
-        mock.Setup( f => f.IsAlive ).Returns( isAlive );
+        List<IFighter> fighters = [ f1, f2, f3 ];
+        GameManager gameManager = new( fighters );
 
+        // Act
+        gameManager.StartBattle();
+
+        // Assert
+        Assert.Single( fighters );
+    }
+
+    [Fact]
+    public void StartBattle_WhenArmorExceedsDamage_BattleResolvesToOneWinner()
+    {
+        // Arrange
+        Fighter f1 = CreateFighter( "Tank 1", weaponDamage: 0, raceHealth: 10, classHealth: 0, raceArmor: 100, classArmor: 100 );
+        Fighter f2 = CreateFighter( "Tank 2", weaponDamage: 0, raceHealth: 10, classHealth: 0, raceArmor: 100, classArmor: 100 );
+
+        List<IFighter> fighters = [ f1, f2 ];
+        GameManager gameManager = new( fighters );
+
+        // Act
+        gameManager.StartBattle();
+
+        // Assert
+        Assert.Single( fighters );
+    }
+
+    private static Fighter CreateFighter(
+        string name = "Test Fighter",
+        int raceHealth = 100,
+        int classHealth = 50,
+        int raceDamage = 10,
+        int classDamage = 15,
+        int weaponDamage = 20,
+        int raceArmor = 5,
+        int classArmor = 3,
+        int armorValue = 10 )
+    {
+        Mock<IRace> raceMock = CreateRaceMock( raceHealth, raceDamage, raceArmor );
+        Mock<IClass> classMock = CreateClassMock( classHealth, classDamage, classArmor );
+        Mock<IWeapon> weaponMock = CreateWeaponMock( weaponDamage );
+        Mock<IArmor> armorMock = CreateArmorMock( armorValue );
+
+        return new Fighter(
+            name,
+            raceMock.Object,
+            classMock.Object,
+            weaponMock.Object,
+            armorMock.Object
+        );
+    }
+
+    private static Mock<IRace> CreateRaceMock( int health, int damage, int armor )
+    {
+        Mock<IRace> mock = new();
+        mock.Setup( r => r.Health ).Returns( health );
+        mock.Setup( r => r.Damage ).Returns( damage );
+        mock.Setup( r => r.Armor ).Returns( armor );
         return mock;
     }
 
-    private static Mock<IFighter> CreateFighterMock(
-        string name,
-        int health,
-        int fullDamage,
-        int fullArmor,
-        int initiative,
-        Func<bool> isAliveGetter )
+    private static Mock<IClass> CreateClassMock( int health, int damage, int armor )
     {
-        Mock<IFighter> mock = new();
+        Mock<IClass> mock = new();
+        mock.Setup( c => c.Health ).Returns( health );
+        mock.Setup( c => c.Damage ).Returns( damage );
+        mock.Setup( c => c.Armor ).Returns( armor );
+        return mock;
+    }
 
-        mock.Setup( f => f.Name ).Returns( name );
-        mock.Setup( f => f.Health ).Returns( health );
-        mock.Setup( f => f.FullDamage ).Returns( fullDamage );
-        mock.Setup( f => f.FullArmor ).Returns( fullArmor );
-        mock.Setup( f => f.Initiative ).Returns( initiative );
-        mock.Setup( f => f.IsAlive ).Returns( isAliveGetter );
+    private static Mock<IWeapon> CreateWeaponMock( int damage )
+    {
+        Mock<IWeapon> mock = new();
+        mock.Setup( w => w.Damage ).Returns( damage );
+        return mock;
+    }
 
+    private static Mock<IArmor> CreateArmorMock( int armor )
+    {
+        Mock<IArmor> mock = new();
+        mock.Setup( a => a.Armor ).Returns( armor );
         return mock;
     }
 }

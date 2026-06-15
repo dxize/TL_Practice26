@@ -1,51 +1,38 @@
-﻿using FighterGame.Model.Armors;
+using FighterGame.Model.Armors;
 
 namespace Tests.Model.Armors;
 
 public class ArmorTests
 {
-    private const string NoArmorName = "NoArmor";
-    private const int NoArmorExpectedArmor = 0;
+    private const string _noArmorName = "Без брони";
+    private const int _noArmorExpectedArmor = 0;
 
-    private const string FirstArmorName = "FirstArmor";
-    private const int FirstArmorExpectedArmor = 2;
+    private const string _firstArmorName = "Лёгкая броня";
+    private const int _firstArmorExpectedArmor = 2;
 
-    private const string SecondArmorName = "SecondArmor";
-    private const int SecondArmorExpectedArmor = 4;
+    private const string _secondArmorName = "Средняя броня";
+    private const int _secondArmorExpectedArmor = 4;
 
-    private const string ThirdArmorName = "ThirdArmor";
-    private const int ThirdArmorExpectedArmor = 6;
+    private const string _thirdArmorName = "Тяжёлая броня";
+    private const int _thirdArmorExpectedArmor = 6;
+
+    public static readonly object[][] ArmorTestData =
+    {
+        new object[] { new NoArmor(), _noArmorName, _noArmorExpectedArmor },
+        new object[] { new FirstArmor(), _firstArmorName, _firstArmorExpectedArmor },
+        new object[] { new SecondArmor(), _secondArmorName, _secondArmorExpectedArmor },
+        new object[] { new ThirdArmor(), _thirdArmorName, _thirdArmorExpectedArmor }
+    };
 
     [Theory]
-    [InlineData( NoArmorName, NoArmorExpectedArmor )]
-    [InlineData( FirstArmorName, FirstArmorExpectedArmor )]
-    [InlineData( SecondArmorName, SecondArmorExpectedArmor )]
-    [InlineData( ThirdArmorName, ThirdArmorExpectedArmor )]
-    public void Constructor_WhenArmorCreated_HasExpectedArmor(
-        string armorName,
+    [MemberData( nameof( ArmorTestData ) )]
+    public void Constructor_WhenArmorCreated_HasExpectedStats(
+        IArmor armor,
+        string expectedName,
         int expectedArmor )
     {
-        // Arrange
-        IArmor armor;
-
-        if ( armorName == NoArmorName )
-        {
-            armor = new NoArmor();
-        }
-        else if ( armorName == FirstArmorName )
-        {
-            armor = new FirstArmor();
-        }
-        else if ( armorName == SecondArmorName )
-        {
-            armor = new SecondArmor();
-        }
-        else
-        {
-            armor = new ThirdArmor();
-        }
-
         // Assert
         Assert.Equal( expectedArmor, armor.Armor );
+        Assert.Equal( expectedName, armor.Name );
     }
 }

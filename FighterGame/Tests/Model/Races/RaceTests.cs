@@ -1,53 +1,44 @@
-﻿using FighterGame.Model.Races;
+using FighterGame.Model.Races;
 
 namespace Tests.Model.Races;
 
 public class RaceTests
 {
-    private const string Asian = "Asian";
-    private const int AsianExpectedDamage = 8;
-    private const int AsianExpectedHealth = 70;
-    private const int AsianExpectedArmor = 10;
+    private const string _asian = "Азиат";
+    private const int _asianExpectedDamage = 8;
+    private const int _asianExpectedHealth = 70;
+    private const int _asianExpectedArmor = 10;
 
-    private const string European = "European";
-    private const int EuropeanExpectedDamage = 10;
-    private const int EuropeanExpectedHealth = 90;
-    private const int EuropeanExpectedArmor = 4;
+    private const string _european = "Европеец";
+    private const int _europeanExpectedDamage = 10;
+    private const int _europeanExpectedHealth = 90;
+    private const int _europeanExpectedArmor = 4;
 
-    private const string Negroid = "Negroid";
-    private const int NegroidExpectedDamage = 12;
-    private const int NegroidExpectedHealth = 110;
-    private const int NegroidExpectedArmor = 1;
+    private const string _negroid = "Негроид";
+    private const int _negroidExpectedDamage = 12;
+    private const int _negroidExpectedHealth = 110;
+    private const int _negroidExpectedArmor = 1;
+
+    public static readonly object[][] RaceTestData =
+    {
+        new object[] { new AsianRace(), _asian, _asianExpectedDamage, _asianExpectedHealth, _asianExpectedArmor },
+        new object[] { new EuropeanRace(), _european, _europeanExpectedDamage, _europeanExpectedHealth, _europeanExpectedArmor },
+        new object[] { new NegroidRace(), _negroid, _negroidExpectedDamage, _negroidExpectedHealth, _negroidExpectedArmor }
+    };
 
     [Theory]
-    [InlineData( Asian, AsianExpectedDamage, AsianExpectedHealth, AsianExpectedArmor )]
-    [InlineData( European, EuropeanExpectedDamage, EuropeanExpectedHealth, EuropeanExpectedArmor )]
-    [InlineData( Negroid, NegroidExpectedDamage, NegroidExpectedHealth, NegroidExpectedArmor )]
+    [MemberData( nameof( RaceTestData ) )]
     public void Constructor_WhenRaceCreated_HasExpectedStats(
-        string raceName,
+        IRace race,
+        string expectedName,
         int expectedDamage,
         int expectedHealth,
         int expectedArmor )
     {
-        // Arrange
-        IRace race;
-
-        if ( raceName == Asian )
-        {
-            race = new AsianRace();
-        }
-        else if ( raceName == European )
-        {
-            race = new EuropeanRace();
-        }
-        else
-        {
-            race = new NegroidRace();
-        }
-
         // Assert
         Assert.Equal( expectedDamage, race.Damage );
         Assert.Equal( expectedHealth, race.Health );
         Assert.Equal( expectedArmor, race.Armor );
+        Assert.Equal( expectedName, race.Name );
     }
 }

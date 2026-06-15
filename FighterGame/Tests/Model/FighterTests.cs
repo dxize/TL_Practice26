@@ -1,4 +1,4 @@
-﻿using FighterGame.Model;
+using FighterGame.Model;
 using FighterGame.Model.Armors;
 using FighterGame.Model.Classes;
 using FighterGame.Model.Races;
@@ -94,10 +94,15 @@ public class FighterTests
         Assert.Equal( 18, fullArmor );
     }
 
+    public static readonly object[][] TakeDamageTestData =
+    {
+        new object[] { 10, 140 },
+        new object[] { 50, 100 },
+        new object[] { 149, 1 }
+    };
+
     [Theory]
-    [InlineData( 10, 140 )]
-    [InlineData( 50, 100 )]
-    [InlineData( 149, 1 )]
+    [MemberData( nameof( TakeDamageTestData ) )]
     public void TakeDamage_WhenDamageIsPositive_DecreasesHealth(
         int damage,
         int expectedHealth )
@@ -129,6 +134,19 @@ public class FighterTests
 
         // Assert
         Assert.Equal( 150, fighter.Health );
+    }
+
+    [Fact]
+    public void TakeDamage_WhenDamageIsNegative_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        Fighter fighter = CreateFighter(
+            raceHealth: 100,
+            classHealth: 50
+        );
+
+        // Act & Assert
+        Assert.Throws<ArgumentOutOfRangeException>( () => fighter.TakeDamage( -10 ) );
     }
 
     [Fact]
@@ -180,7 +198,7 @@ public class FighterTests
     }
 
     [Fact]
-    public void TakeDamage_WhenHealthRemainsPositive_Alive()
+    public void TakeDamage_WhenHealthRemainsPositive_RemainsAlive()
     {
         // Arrange
         Fighter fighter = CreateFighter(

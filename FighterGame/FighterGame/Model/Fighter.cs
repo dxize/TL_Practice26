@@ -1,4 +1,4 @@
-﻿using FighterGame.Model.Armors;
+using FighterGame.Model.Armors;
 using FighterGame.Model.Classes;
 using FighterGame.Model.Races;
 using FighterGame.Model.Weapons;
@@ -38,6 +38,11 @@ public class Fighter : IFighter
 
     public void TakeDamage( int damage )
     {
+        if ( damage < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( damage ), "Damage cannot be negative." );
+        }
+
         int newHealth = _health - damage;
         if ( newHealth < 0 )
         {
