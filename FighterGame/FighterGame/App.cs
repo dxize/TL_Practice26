@@ -115,7 +115,7 @@ internal class App
                     continue;
                 }
 
-                GameManager manager = new GameManager( _fighters );
+                GameManager manager = new( _fighters );
                 manager.StartBattle();
 
                 _fighters.Clear();

@@ -6,7 +6,7 @@ using FighterGame.Model.Weapons;
 
 namespace FighterGame;
 
-internal class FighterFactory
+public class FighterFactory
 {
     private readonly List<IRace> _availableRaces =
     [

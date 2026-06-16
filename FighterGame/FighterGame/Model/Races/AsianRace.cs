@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Model.Races;
 
-internal class AsianRace : IRace
+public class AsianRace : IRace
 {
     public string Name { get; } = "Азиат";
     public int Damage { get; } = 8;

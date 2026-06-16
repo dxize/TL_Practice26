@@ -1,6 +1,6 @@
 ﻿namespace FighterGame.Model.Armors;
 
-internal interface IArmor
+public interface IArmor
 {
     string Name { get; }
     int Armor { get; }

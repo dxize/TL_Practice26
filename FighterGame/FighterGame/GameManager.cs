@@ -1,9 +1,9 @@
-﻿using FighterGame.Model;
+using FighterGame.Model;
 using FighterGame.Utilities;
 
 namespace FighterGame;
 
-internal class GameManager
+public class GameManager
 {
     private List<IFighter> _fighters = [];
 
@@ -73,7 +73,7 @@ internal class GameManager
 
     private int CalculateDamage( IFighter attacker, IFighter defender )
     {
-        int baseDamage = Math.Max( attacker.FullDamage - defender.FullArmor, 0 );
+        int baseDamage = Math.Max( attacker.FullDamage - defender.FullArmor, 1 );
 
         double modifier = Randomizer.GetDouble() * ( 1.1 - 0.8 ) + 0.8;
         int finalDamage = ( int )Math.Round( baseDamage * modifier );
