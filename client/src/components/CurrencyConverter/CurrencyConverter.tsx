@@ -50,17 +50,16 @@ export const CurrencyConverter = () => {
             )}
 
             <div className={styles.converterRow}>
+                <SwapButton onClick={swap} />
+
                 <div className={styles.inputsColumn}>
-                    <div className={styles.inputWithSwap}>
-                        <InputCurrencyCoverter
-                            value={amount}
-                            onValueChange={setAmount}
-                            currencies={currencies}
-                            selectedCode={fromCode}
-                            onCurrencyChange={handleFromChange}
-                        />
-                        <SwapButton onClick={swap} />
-                    </div>
+                    <InputCurrencyCoverter
+                        value={amount}
+                        onValueChange={setAmount}
+                        currencies={currencies}
+                        selectedCode={fromCode}
+                        onCurrencyChange={handleFromChange}
+                    />
 
                     <InputCurrencyCoverter
                         value={result}
@@ -82,16 +81,6 @@ export const CurrencyConverter = () => {
                 </div>
             </div>
 
-            {/*
-              key={pairKey} — при смене валютной пары React размонтирует
-              и смонтирует компонент заново, что сбрасывает его внутреннее
-              состояние (isOpen → false). Это проще и надёжнее, чем
-              пробрасывать управление открытием наружу через пропсы,
-              потому что состояние open/closed — деталь реализации
-              MoreAboutCurrency, и родитель не должен о ней знать.
-              Так же если делать через пропсы произойдёт перерендер всех 
-              компонентов, что может вызвать лишние вычисления.
-            */}
             {fromCurrency && toCurrency && (
                 <MoreAboutCurrency
                     key={pairKey}

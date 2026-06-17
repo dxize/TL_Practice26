@@ -20,7 +20,6 @@ export const fetchCurrencies = async (
                 errorMessage = errorData.message;
             }
         } catch {
-            /* ignore parse error */
         }
         throw new Error(errorMessage);
     }
@@ -52,7 +51,6 @@ export const fetchPriceHistory = async (
                 errorMessage = errorData.message;
             }
         } catch {
-            /* ignore parse error */
         }
         throw new Error(errorMessage);
     }

@@ -13,9 +13,9 @@
 
 .converterRow {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    gap: clamp(16px, 3vw, 40px);
+    gap: 16px;
 
     inline-size: 90%;
     margin-block-start: clamp(12px, 2vw, 20px);
@@ -24,17 +24,10 @@
 .inputsColumn {
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
 
-    inline-size: 40%;
+    inline-size: 35%;
 
     gap: 16px;
-}
-
-.inputWithSwap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 .chartColumn {

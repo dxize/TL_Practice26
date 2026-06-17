@@ -24,11 +24,8 @@
     font-family: Inter, sans-serif;
     font-size: 12px;
     font-weight: 500;
-    line-height: 1;
 
     cursor: pointer;
-
-    transition: all 0.2s ease;
 }
 
 .periodButton:hover {
@@ -45,82 +42,19 @@
 }
 
 .chartArea {
-    position: relative;
-
     min-block-size: 200px;
 }
 
 .placeholder {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 12px;
 
     block-size: 200px;
 
     color: #999;
     font-family: Inter, sans-serif;
     font-size: 14px;
-}
-
-.spinner {
-    inline-size: 28px;
-    block-size: 28px;
-
-    border: 3px solid #e8e8e8;
-    border-block-start-color: #1a73e8;
-    border-radius: 50%;
-
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.errorIcon {
-    color: #ff6b6b;
-    font-size: 28px;
-}
-
-.tooltip {
-    padding: 8px 12px;
-
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-
-    color: #fff;
-    font-family: Inter, sans-serif;
-    font-size: 12px;
-}
-
-.tooltipDate {
-    margin-block-end: 4px;
-
-    opacity: 0.8;
-}
-
-.tooltipValue {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.tooltipDot {
-    display: inline-block;
-
-    inline-size: 8px;
-    block-size: 8px;
-
-    background: #1a73e8;
-    border-radius: 50%;
 }
 
 .autoRefreshError {

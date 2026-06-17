@@ -85,11 +85,6 @@ export const useConverter = () => {
     const [state, dispatch] = useReducer(converterReducer, initialState);
     const [periodMinutes, setPeriodMinutes] = useState(DEFAULT_PERIOD_MINUTES);
 
-    /*
-     * useEffect #1: загрузка списка валют (один раз при маунте).
-     * Это настоящий side effect — запрос к API.
-     * Cleanup: AbortController отменяет запрос при размонтировании.
-     */
     useEffect(() => {
         const controller = new AbortController();
 
@@ -115,11 +110,6 @@ export const useConverter = () => {
         };
     }, []);
 
-    /*
-     * useEffect #2 (внутри usePriceChart): загрузка и автообновление графика.
-     * Зависимости: [fromCode, toCode, periodMinutes].
-     * Cleanup: AbortController + clearInterval.
-     */
     const { chartData, chartLoading, chartError, latestPrice } = usePriceChart(
         state.fromCode,
         state.toCode,
@@ -131,12 +121,6 @@ export const useConverter = () => {
     const handleToChange = (code: string) => dispatch({ type: "SET_TO_CODE", payload: code });
     const swap = () => dispatch({ type: "SWAP" });
 
-    /*
-     * Синхронные вычисления — НЕ используют useEffect:
-     * - result: пересчёт суммы конвертации
-     * - fromCurrency / toCurrency: поиск валюты по коду
-     * - pairKey: ключ для MoreAboutCurrency
-     */
     const numericAmount = parseFloat(state.amount.replace(",", "."));
     const result =
         isNaN(numericAmount) || !latestPrice
