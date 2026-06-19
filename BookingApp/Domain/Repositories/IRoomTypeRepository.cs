@@ -6,7 +6,7 @@ public interface IRoomTypeRepository
 {
     IReadOnlyList<RoomType> GetAll();
 
-    IReadOnlyList<RoomType> GetRoomTypesByPropertyId( int propertyId );
+    IReadOnlyList<RoomType> GetRoomTypesByPropertyId( int propertyId, int? guests = null, decimal? maxPrice = null );
 
     RoomType GetById( int id );
 

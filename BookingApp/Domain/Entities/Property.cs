@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities;
+namespace Domain.Entities;
 
 public class Property
 {
@@ -97,14 +97,5 @@ public class Property
     {
         Latitude = latitude;
         Longitude = longitude;
-    }
-
-    public void CopyFrom( Property other )
-    {
-        SetName( other.Name );
-        SetCountry( other.Country );
-        SetCity( other.City );
-        SetAddress( other.Address );
-        SetCoordinates( other.Latitude, other.Longitude );
     }
 }

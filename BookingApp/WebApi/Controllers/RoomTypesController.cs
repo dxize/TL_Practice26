@@ -1,5 +1,5 @@
+using Application.Services;
 using Domain.Entities;
-using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace WebApi.Controllers;
 [Route( "api" )]
 public class RoomTypesController : ControllerBase
 {
-    private readonly IRoomTypeService _roomTypeService;
+    private readonly RoomTypeService _roomTypeService;
 
-    public RoomTypesController( IRoomTypeService roomTypeService )
+    public RoomTypesController( RoomTypeService roomTypeService )
     {
         _roomTypeService = roomTypeService;
     }
@@ -23,19 +23,7 @@ public class RoomTypesController : ControllerBase
         {
             IReadOnlyList<RoomType> roomTypes = _roomTypeService.GetByPropertyId( propertyId );
 
-            List<RoomTypeResponse> response = roomTypes.Select( roomType => new RoomTypeResponse
-            {
-                Id = roomType.Id,
-                PropertyId = roomType.PropertyId,
-                Name = roomType.Name,
-                DailyPrice = roomType.DailyPrice,
-                Currency = roomType.Currency,
-                MinPersonCount = roomType.MinPersonCount,
-                MaxPersonCount = roomType.MaxPersonCount,
-                TotalRooms = roomType.TotalRooms,
-                Services = roomType.Services,
-                Amenities = roomType.Amenities
-            } ).ToList();
+            List<RoomTypeResponse> response = roomTypes.Select( MapToResponse ).ToList();
 
             return Ok( response );
         }
@@ -52,19 +40,7 @@ public class RoomTypesController : ControllerBase
         {
             RoomType roomType = _roomTypeService.GetById( id );
 
-            RoomTypeResponse response = new()
-            {
-                Id = roomType.Id,
-                PropertyId = roomType.PropertyId,
-                Name = roomType.Name,
-                DailyPrice = roomType.DailyPrice,
-                Currency = roomType.Currency,
-                MinPersonCount = roomType.MinPersonCount,
-                MaxPersonCount = roomType.MaxPersonCount,
-                TotalRooms = roomType.TotalRooms,
-                Services = roomType.Services,
-                Amenities = roomType.Amenities
-            };
+            RoomTypeResponse response = MapToResponse( roomType );
 
             return Ok( response );
         }
@@ -79,7 +55,7 @@ public class RoomTypesController : ControllerBase
     {
         try
         {
-            RoomType roomType = new(
+            _roomTypeService.Create(
                 propertyId,
                 request.Name,
                 request.DailyPrice,
@@ -89,8 +65,6 @@ public class RoomTypesController : ControllerBase
                 request.TotalRooms,
                 request.Services,
                 request.Amenities );
-
-            _roomTypeService.Create( propertyId, roomType );
 
             return Ok();
         }
@@ -105,16 +79,16 @@ public class RoomTypesController : ControllerBase
     {
         try
         {
-            _roomTypeService.Update( id, roomType =>
-            {
-                roomType.SetName( request.Name );
-                roomType.SetDailyPrice( request.DailyPrice );
-                roomType.SetCurrency( request.Currency );
-                roomType.SetPersonCount( request.MinPersonCount, request.MaxPersonCount );
-                roomType.SetTotalRooms( request.TotalRooms );
-                roomType.SetServices( request.Services );
-                roomType.SetAmenities( request.Amenities );
-            } );
+            _roomTypeService.Update(
+                id,
+                request.Name,
+                request.DailyPrice,
+                request.Currency,
+                request.MinPersonCount,
+                request.MaxPersonCount,
+                request.TotalRooms,
+                request.Services,
+                request.Amenities );
 
             return Ok();
         }
@@ -136,5 +110,22 @@ public class RoomTypesController : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    private static RoomTypeResponse MapToResponse( RoomType roomType )
+    {
+        return new RoomTypeResponse
+        {
+            Id = roomType.Id,
+            PropertyId = roomType.PropertyId,
+            Name = roomType.Name,
+            DailyPrice = roomType.DailyPrice,
+            Currency = roomType.Currency,
+            MinPersonCount = roomType.MinPersonCount,
+            MaxPersonCount = roomType.MaxPersonCount,
+            TotalRooms = roomType.TotalRooms,
+            Services = roomType.Services,
+            Amenities = roomType.Amenities
+        };
     }
 }

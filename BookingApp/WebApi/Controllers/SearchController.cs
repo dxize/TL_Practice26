@@ -1,5 +1,5 @@
+using Application.Services;
 using Domain.Entities;
-using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace WebApi.Controllers;
 [Route( "api/search" )]
 public class SearchController : ControllerBase
 {
-    private readonly ISearchService _searchService;
+    private readonly SearchService _searchService;
 
-    public SearchController( ISearchService searchService )
+    public SearchController( SearchService searchService )
     {
         _searchService = searchService;
     }
@@ -32,7 +32,14 @@ public class SearchController : ControllerBase
         IReadOnlyList<SearchResult> searchResults = _searchService.Search(
             city, arrivalDate, departureDate, guests, maxPrice );
 
-        List<SearchResultResponse> response = searchResults.Select( result => new SearchResultResponse
+        List<SearchResultResponse> response = searchResults.Select( MapToResponse ).ToList();
+
+        return Ok( response );
+    }
+
+    private static SearchResultResponse MapToResponse( SearchResult result )
+    {
+        return new SearchResultResponse
         {
             Property = new PropertyResponse
             {
@@ -44,21 +51,24 @@ public class SearchController : ControllerBase
                 Latitude = result.Property.Latitude,
                 Longitude = result.Property.Longitude
             },
-            AvailableRoomTypes = result.AvailableRoomTypes.Select( roomType => new RoomTypeResponse
-            {
-                Id = roomType.Id,
-                PropertyId = roomType.PropertyId,
-                Name = roomType.Name,
-                DailyPrice = roomType.DailyPrice,
-                Currency = roomType.Currency,
-                MinPersonCount = roomType.MinPersonCount,
-                MaxPersonCount = roomType.MaxPersonCount,
-                TotalRooms = roomType.TotalRooms,
-                Services = roomType.Services,
-                Amenities = roomType.Amenities
-            } ).ToList()
-        } ).ToList();
+            AvailableRoomTypes = result.AvailableRoomTypes.Select( MapToResponse ).ToList()
+        };
+    }
 
-        return Ok( response );
+    private static RoomTypeResponse MapToResponse( RoomType roomType )
+    {
+        return new RoomTypeResponse
+        {
+            Id = roomType.Id,
+            PropertyId = roomType.PropertyId,
+            Name = roomType.Name,
+            DailyPrice = roomType.DailyPrice,
+            Currency = roomType.Currency,
+            MinPersonCount = roomType.MinPersonCount,
+            MaxPersonCount = roomType.MaxPersonCount,
+            TotalRooms = roomType.TotalRooms,
+            Services = roomType.Services,
+            Amenities = roomType.Amenities
+        };
     }
 }

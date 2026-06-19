@@ -4,7 +4,11 @@ namespace Domain.Repositories;
 
 public interface IReservationRepository
 {
-    IReadOnlyList<Reservation> GetAll();
+    IReadOnlyList<Reservation> GetAll(
+        int? propertyId = null,
+        string guestName = null,
+        DateTime? dateFrom = null,
+        DateTime? dateTo = null );
 
     Reservation GetById( int id );
 

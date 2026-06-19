@@ -1,5 +1,5 @@
+using Application.Services;
 using Domain.Entities;
-using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace WebApi.Controllers;
 [Route( "api/properties" )]
 public class PropertiesController : ControllerBase
 {
-    private readonly IPropertyService _propertyService;
+    private readonly PropertyService _propertyService;
 
-    public PropertiesController( IPropertyService propertyService )
+    public PropertiesController( PropertyService propertyService )
     {
         _propertyService = propertyService;
     }
@@ -21,16 +21,7 @@ public class PropertiesController : ControllerBase
     {
         IReadOnlyList<Property> properties = _propertyService.GetAll();
 
-        List<PropertyResponse> response = properties.Select( property => new PropertyResponse
-        {
-            Id = property.Id,
-            Name = property.Name,
-            Country = property.Country,
-            City = property.City,
-            Address = property.Address,
-            Latitude = property.Latitude,
-            Longitude = property.Longitude
-        } ).ToList();
+        List<PropertyResponse> response = properties.Select( MapToResponse ).ToList();
 
         return Ok( response );
     }
@@ -42,16 +33,7 @@ public class PropertiesController : ControllerBase
         {
             Property property = _propertyService.GetById( id );
 
-            PropertyResponse response = new()
-            {
-                Id = property.Id,
-                Name = property.Name,
-                Country = property.Country,
-                City = property.City,
-                Address = property.Address,
-                Latitude = property.Latitude,
-                Longitude = property.Longitude
-            };
+            PropertyResponse response = MapToResponse( property );
 
             return Ok( response );
         }
@@ -64,15 +46,13 @@ public class PropertiesController : ControllerBase
     [HttpPost( "" )]
     public IActionResult CreateProperty( [FromBody] CreatePropertyRequest request )
     {
-        Property property = new(
+        _propertyService.Create(
             request.Name,
             request.Country,
             request.City,
             request.Address,
             request.Latitude,
             request.Longitude );
-
-        _propertyService.Create( property );
 
         return Ok();
     }
@@ -82,14 +62,14 @@ public class PropertiesController : ControllerBase
     {
         try
         {
-            _propertyService.Update( id, property =>
-            {
-                property.SetName( request.Name );
-                property.SetCountry( request.Country );
-                property.SetCity( request.City );
-                property.SetAddress( request.Address );
-                property.SetCoordinates( request.Latitude, request.Longitude );
-            } );
+            _propertyService.Update(
+                id,
+                request.Name,
+                request.Country,
+                request.City,
+                request.Address,
+                request.Latitude,
+                request.Longitude );
 
             return Ok();
         }
@@ -111,5 +91,19 @@ public class PropertiesController : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    private static PropertyResponse MapToResponse( Property property )
+    {
+        return new PropertyResponse
+        {
+            Id = property.Id,
+            Name = property.Name,
+            Country = property.Country,
+            City = property.City,
+            Address = property.Address,
+            Latitude = property.Latitude,
+            Longitude = property.Longitude
+        };
     }
 }

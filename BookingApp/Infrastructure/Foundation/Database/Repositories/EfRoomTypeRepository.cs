@@ -17,11 +17,23 @@ public class EfRoomTypeRepository : IRoomTypeRepository
         return _dbContext.Set<RoomType>().ToList();
     }
 
-    public IReadOnlyList<RoomType> GetRoomTypesByPropertyId( int propertyId )
+    public IReadOnlyList<RoomType> GetRoomTypesByPropertyId( int propertyId, int? guests = null, decimal? maxPrice = null )
     {
-        return _dbContext.Set<RoomType>()
+        IQueryable<RoomType> query = _dbContext.Set<RoomType>()
             .Where( roomType => roomType.PropertyId == propertyId )
-            .ToList();
+            .AsQueryable();
+
+        if ( guests.HasValue )
+        {
+            query = query.Where( rt => guests.Value >= rt.MinPersonCount && guests.Value <= rt.MaxPersonCount );
+        }
+
+        if ( maxPrice.HasValue )
+        {
+            query = query.Where( rt => rt.DailyPrice <= maxPrice.Value );
+        }
+
+        return query.ToList();
     }
 
     public RoomType GetById( int id )

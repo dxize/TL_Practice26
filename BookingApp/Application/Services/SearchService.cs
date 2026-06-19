@@ -1,10 +1,9 @@
 using Domain.Entities;
 using Domain.Repositories;
-using Domain.Services;
 
 namespace Application.Services;
 
-public class SearchService : ISearchService
+public class SearchService
 {
     private readonly IPropertyRepository _propertyRepository;
     private readonly IRoomTypeRepository _roomTypeRepository;
@@ -27,31 +26,18 @@ public class SearchService : ISearchService
         int guests,
         decimal? maxPrice )
     {
-        IReadOnlyList<Property> properties = _propertyRepository.GetAll();
-        List<Property> filteredProperties = properties
-            .Where( property => property.City.Equals( city, StringComparison.OrdinalIgnoreCase ) )
-            .ToList();
+        IReadOnlyList<Property> properties = _propertyRepository.GetAll( city );
 
         List<SearchResult> results = new();
 
-        foreach ( Property property in filteredProperties )
+        foreach ( Property property in properties )
         {
-            IReadOnlyList<RoomType> roomTypes = _roomTypeRepository.GetRoomTypesByPropertyId( property.Id );
+            IReadOnlyList<RoomType> roomTypes = _roomTypeRepository.GetRoomTypesByPropertyId( property.Id, guests, maxPrice );
 
             List<RoomType> availableRoomTypes = new();
 
             foreach ( RoomType roomType in roomTypes )
             {
-                if ( guests < roomType.MinPersonCount || guests > roomType.MaxPersonCount )
-                {
-                    continue;
-                }
-
-                if ( maxPrice.HasValue && roomType.DailyPrice > maxPrice.Value )
-                {
-                    continue;
-                }
-
                 IReadOnlyList<Reservation> overlappingReservations =
                     _reservationRepository.GetActiveReservationsByRoomTypeAndDates(
                         roomType.Id, arrivalDate, departureDate );

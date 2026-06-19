@@ -1,10 +1,9 @@
 using Domain.Entities;
 using Domain.Repositories;
-using Domain.Services;
 
 namespace Application.Services;
 
-public class PropertyService : IPropertyService
+public class PropertyService
 {
     private readonly IPropertyRepository _propertyRepository;
 
@@ -29,15 +28,21 @@ public class PropertyService : IPropertyService
         return property;
     }
 
-    public void Create( Property property )
+    public Property Create( string name, string country, string city, string address, double latitude, double longitude )
     {
+        Property property = new( name, country, city, address, latitude, longitude );
         _propertyRepository.Save( property );
+        return property;
     }
 
-    public void Update( int id, Action<Property> updateAction )
+    public void Update( int id, string name, string country, string city, string address, double latitude, double longitude )
     {
         Property property = GetById( id );
-        updateAction( property );
+        property.SetName( name );
+        property.SetCountry( country );
+        property.SetCity( city );
+        property.SetAddress( address );
+        property.SetCoordinates( latitude, longitude );
         _propertyRepository.Update( property );
     }
 

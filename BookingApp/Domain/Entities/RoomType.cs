@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities;
+namespace Domain.Entities;
 
 public class RoomType
 {
@@ -112,16 +112,5 @@ public class RoomType
     public void SetAmenities( string amenities )
     {
         Amenities = amenities;
-    }
-
-    public void CopyFrom( RoomType other )
-    {
-        SetName( other.Name );
-        SetDailyPrice( other.DailyPrice );
-        SetCurrency( other.Currency );
-        SetPersonCount( other.MinPersonCount, other.MaxPersonCount );
-        SetTotalRooms( other.TotalRooms );
-        SetServices( other.Services );
-        SetAmenities( other.Amenities );
     }
 }

@@ -12,9 +12,16 @@ public class EfPropertyRepository : IPropertyRepository
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<Property> GetAll()
+    public IReadOnlyList<Property> GetAll( string city = null )
     {
-        return _dbContext.Set<Property>().ToList();
+        IQueryable<Property> query = _dbContext.Set<Property>().AsQueryable();
+
+        if ( !string.IsNullOrWhiteSpace( city ) )
+        {
+            query = query.Where( property => property.City.ToLower() == city.ToLower() );
+        }
+
+        return query.ToList();
     }
 
     public Property GetById( int id )

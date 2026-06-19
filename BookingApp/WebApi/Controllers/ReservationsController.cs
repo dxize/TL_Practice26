@@ -1,5 +1,5 @@
+using Application.Services;
 using Domain.Entities;
-using Domain.Services;
 using WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace WebApi.Controllers;
 [Route( "api/reservations" )]
 public class ReservationsController : ControllerBase
 {
-    private readonly IReservationService _reservationService;
+    private readonly ReservationService _reservationService;
 
-    public ReservationsController( IReservationService reservationService )
+    public ReservationsController( ReservationService reservationService )
     {
         _reservationService = reservationService;
     }
@@ -26,22 +26,7 @@ public class ReservationsController : ControllerBase
         IReadOnlyList<Reservation> reservations = _reservationService.GetAll(
             propertyId, guestName, dateFrom, dateTo );
 
-        List<ReservationResponse> response = reservations.Select( r => new ReservationResponse
-        {
-            Id = r.Id,
-            PropertyId = r.PropertyId,
-            RoomTypeId = r.RoomTypeId,
-            ArrivalDate = r.ArrivalDate,
-            DepartureDate = r.DepartureDate,
-            ArrivalTime = r.ArrivalTime,
-            DepartureTime = r.DepartureTime,
-            GuestName = r.GuestName,
-            GuestPhoneNumber = r.GuestPhoneNumber,
-            Guests = r.Guests,
-            Total = r.Total,
-            Currency = r.Currency,
-            IsCanceled = r.IsCanceled
-        } ).ToList();
+        List<ReservationResponse> response = reservations.Select( MapToResponse ).ToList();
 
         return Ok( response );
     }
@@ -53,22 +38,7 @@ public class ReservationsController : ControllerBase
         {
             Reservation reservation = _reservationService.GetById( id );
 
-            ReservationResponse response = new()
-            {
-                Id = reservation.Id,
-                PropertyId = reservation.PropertyId,
-                RoomTypeId = reservation.RoomTypeId,
-                ArrivalDate = reservation.ArrivalDate,
-                DepartureDate = reservation.DepartureDate,
-                ArrivalTime = reservation.ArrivalTime,
-                DepartureTime = reservation.DepartureTime,
-                GuestName = reservation.GuestName,
-                GuestPhoneNumber = reservation.GuestPhoneNumber,
-                Guests = reservation.Guests,
-                Total = reservation.Total,
-                Currency = reservation.Currency,
-                IsCanceled = reservation.IsCanceled
-            };
+            ReservationResponse response = MapToResponse( reservation );
 
             return Ok( response );
         }
@@ -88,7 +58,7 @@ public class ReservationsController : ControllerBase
 
         try
         {
-            Reservation reservation = new(
+            _reservationService.Create(
                 request.PropertyId,
                 request.RoomTypeId,
                 request.ArrivalDate,
@@ -97,11 +67,7 @@ public class ReservationsController : ControllerBase
                 request.DepartureTime,
                 request.GuestName,
                 request.GuestPhoneNumber,
-                request.Guests,
-                0,
-                string.Empty );
-
-            _reservationService.Create( reservation );
+                request.Guests );
 
             return Ok();
         }
@@ -123,5 +89,25 @@ public class ReservationsController : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    private static ReservationResponse MapToResponse( Reservation reservation )
+    {
+        return new ReservationResponse
+        {
+            Id = reservation.Id,
+            PropertyId = reservation.PropertyId,
+            RoomTypeId = reservation.RoomTypeId,
+            ArrivalDate = reservation.ArrivalDate,
+            DepartureDate = reservation.DepartureDate,
+            ArrivalTime = reservation.ArrivalTime,
+            DepartureTime = reservation.DepartureTime,
+            GuestName = reservation.GuestName,
+            GuestPhoneNumber = reservation.GuestPhoneNumber,
+            Guests = reservation.Guests,
+            Total = reservation.Total,
+            Currency = reservation.Currency,
+            IsCanceled = reservation.IsCanceled
+        };
     }
 }

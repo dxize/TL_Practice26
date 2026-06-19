@@ -1,10 +1,9 @@
 using Domain.Entities;
 using Domain.Repositories;
-using Domain.Services;
 
 namespace Application.Services;
 
-public class ReservationService : IReservationService
+public class ReservationService
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IPropertyRepository _propertyRepository;
@@ -26,31 +25,7 @@ public class ReservationService : IReservationService
         DateTime? dateFrom,
         DateTime? dateTo )
     {
-        IReadOnlyList<Reservation> reservations = _reservationRepository.GetAll();
-
-        IEnumerable<Reservation> filtered = reservations;
-
-        if ( propertyId.HasValue )
-        {
-            filtered = filtered.Where( r => r.PropertyId == propertyId.Value );
-        }
-
-        if ( !string.IsNullOrWhiteSpace( guestName ) )
-        {
-            filtered = filtered.Where( r => r.GuestName.Contains( guestName, StringComparison.OrdinalIgnoreCase ) );
-        }
-
-        if ( dateFrom.HasValue )
-        {
-            filtered = filtered.Where( r => r.DepartureDate > dateFrom.Value );
-        }
-
-        if ( dateTo.HasValue )
-        {
-            filtered = filtered.Where( r => r.ArrivalDate < dateTo.Value );
-        }
-
-        return filtered.ToList();
+        return _reservationRepository.GetAll( propertyId, guestName, dateFrom, dateTo );
     }
 
     public Reservation GetById( int id )
@@ -64,26 +39,35 @@ public class ReservationService : IReservationService
         return reservation;
     }
 
-    public void Create( Reservation reservation )
+    public Reservation Create(
+        int propertyId,
+        int roomTypeId,
+        DateTime arrivalDate,
+        DateTime departureDate,
+        TimeSpan arrivalTime,
+        TimeSpan departureTime,
+        string guestName,
+        string guestPhoneNumber,
+        int guests )
     {
-        Property property = _propertyRepository.GetById( reservation.PropertyId );
+        Property property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {
             throw new ArgumentException( "Объект размещения не найден." );
         }
 
-        RoomType roomType = _roomTypeRepository.GetById( reservation.RoomTypeId );
+        RoomType roomType = _roomTypeRepository.GetById( roomTypeId );
         if ( roomType is null )
         {
             throw new ArgumentException( "Категория номера не найдена." );
         }
 
-        if ( roomType.PropertyId != reservation.PropertyId )
+        if ( roomType.PropertyId != propertyId )
         {
             throw new ArgumentException( "Категория номера не принадлежит указанному объекту размещения." );
         }
 
-        if ( reservation.Guests < roomType.MinPersonCount || reservation.Guests > roomType.MaxPersonCount )
+        if ( guests < roomType.MinPersonCount || guests > roomType.MaxPersonCount )
         {
             throw new ArgumentException(
                 $"Количество гостей должно быть от {roomType.MinPersonCount} до {roomType.MaxPersonCount}." );
@@ -91,14 +75,32 @@ public class ReservationService : IReservationService
 
         IReadOnlyList<Reservation> overlappingReservations =
             _reservationRepository.GetActiveReservationsByRoomTypeAndDates(
-                reservation.RoomTypeId, reservation.ArrivalDate, reservation.DepartureDate );
+                roomTypeId, arrivalDate, departureDate );
 
         if ( overlappingReservations.Count >= roomType.TotalRooms )
         {
             throw new ArgumentException( "Нет доступных номеров на указанный период." );
         }
 
+        int nights = ( departureDate - arrivalDate ).Days;
+        decimal total = roomType.DailyPrice * nights;
+        string currency = roomType.Currency;
+
+        Reservation reservation = new(
+            propertyId,
+            roomTypeId,
+            arrivalDate,
+            departureDate,
+            arrivalTime,
+            departureTime,
+            guestName,
+            guestPhoneNumber,
+            guests,
+            total,
+            currency );
+
         _reservationRepository.Save( reservation );
+        return reservation;
     }
 
     public void Cancel( int id )

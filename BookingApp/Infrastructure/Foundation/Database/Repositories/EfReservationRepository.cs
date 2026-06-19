@@ -12,9 +12,35 @@ public class EfReservationRepository : IReservationRepository
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<Reservation> GetAll()
+    public IReadOnlyList<Reservation> GetAll(
+        int? propertyId = null,
+        string guestName = null,
+        DateTime? dateFrom = null,
+        DateTime? dateTo = null )
     {
-        return _dbContext.Set<Reservation>().ToList();
+        IQueryable<Reservation> query = _dbContext.Set<Reservation>().AsQueryable();
+
+        if ( propertyId.HasValue )
+        {
+            query = query.Where( r => r.PropertyId == propertyId.Value );
+        }
+
+        if ( !string.IsNullOrWhiteSpace( guestName ) )
+        {
+            query = query.Where( r => r.GuestName.ToLower().Contains( guestName.ToLower() ) );
+        }
+
+        if ( dateFrom.HasValue )
+        {
+            query = query.Where( r => r.DepartureDate > dateFrom.Value );
+        }
+
+        if ( dateTo.HasValue )
+        {
+            query = query.Where( r => r.ArrivalDate < dateTo.Value );
+        }
+
+        return query.ToList();
     }
 
     public Reservation GetById( int id )

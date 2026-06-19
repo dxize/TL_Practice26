@@ -1,10 +1,9 @@
 using Domain.Entities;
 using Domain.Repositories;
-using Domain.Services;
 
 namespace Application.Services;
 
-public class RoomTypeService : IRoomTypeService
+public class RoomTypeService
 {
     private readonly IRoomTypeRepository _roomTypeRepository;
     private readonly IPropertyRepository _propertyRepository;
@@ -39,7 +38,7 @@ public class RoomTypeService : IRoomTypeService
         return roomType;
     }
 
-    public void Create( int propertyId, RoomType roomType )
+    public RoomType Create( int propertyId, string name, decimal dailyPrice, string currency, int minPersonCount, int maxPersonCount, int totalRooms, string services, string amenities )
     {
         Property property = _propertyRepository.GetById( propertyId );
         if ( property is null )
@@ -47,13 +46,22 @@ public class RoomTypeService : IRoomTypeService
             throw new KeyNotFoundException( $"Property with id {propertyId} not found." );
         }
 
+        RoomType roomType = new( propertyId, name, dailyPrice, currency, minPersonCount, maxPersonCount, totalRooms, services, amenities );
         _roomTypeRepository.Save( roomType );
+
+        return roomType;
     }
 
-    public void Update( int id, Action<RoomType> updateAction )
+    public void Update( int id, string name, decimal dailyPrice, string currency, int minPersonCount, int maxPersonCount, int totalRooms, string services, string amenities )
     {
         RoomType roomType = GetById( id );
-        updateAction( roomType );
+        roomType.SetName( name );
+        roomType.SetDailyPrice( dailyPrice );
+        roomType.SetCurrency( currency );
+        roomType.SetPersonCount( minPersonCount, maxPersonCount );
+        roomType.SetTotalRooms( totalRooms );
+        roomType.SetServices( services );
+        roomType.SetAmenities( amenities );
         _roomTypeRepository.Update( roomType );
     }
 
