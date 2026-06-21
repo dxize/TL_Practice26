@@ -5,7 +5,7 @@ public class RoomType
     public int Id { get; private init; }
 
     public int PropertyId { get; private set; }
-    public Property Property { get; private set; }
+    public Property Property { get; private set; } = null!;
 
     public string Name { get; private set; } = string.Empty;
 

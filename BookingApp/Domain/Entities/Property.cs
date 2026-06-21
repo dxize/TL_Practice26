@@ -4,10 +4,10 @@ public class Property
 {
     public int Id { get; private init; }
 
-    public string Name { get; private set; }
-    public string Country { get; private set; }
-    public string City { get; private set; }
-    public string Address { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Country { get; private set; } = null!;
+    public string City { get; private set; } = null!;
+    public string Address { get; private set; } = null!;
 
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }

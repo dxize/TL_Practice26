@@ -4,6 +4,6 @@ namespace Application.Services;
 
 public class SearchResult
 {
-    public Property Property { get; set; }
-    public IReadOnlyList<RoomType> AvailableRoomTypes { get; set; }
+    public required Property Property { get; set; }
+    public required IReadOnlyList<RoomType> AvailableRoomTypes { get; set; }
 }

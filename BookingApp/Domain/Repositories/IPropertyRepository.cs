@@ -4,9 +4,9 @@ namespace Domain.Repositories;
 
 public interface IPropertyRepository
 {
-    IReadOnlyList<Property> GetAll( string city = null );
+    IReadOnlyList<Property> GetAll( string? city = null );
 
-    Property GetById( int id );
+    Property? GetById( int id );
 
     void Save( Property property );
 

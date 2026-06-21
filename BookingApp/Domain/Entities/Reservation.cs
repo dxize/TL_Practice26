@@ -5,10 +5,10 @@ public class Reservation
     public int Id { get; private init; }
 
     public int PropertyId { get; private set; }
-    public Property Property { get; private set; }
+    public Property Property { get; private set; } = null!;
 
     public int RoomTypeId { get; private set; }
-    public RoomType RoomType { get; private set; }
+    public RoomType RoomType { get; private set; } = null!;
 
     public DateTime ArrivalDate { get; private set; }
     public DateTime DepartureDate { get; private set; }
@@ -16,13 +16,13 @@ public class Reservation
     public TimeSpan ArrivalTime { get; private set; }
     public TimeSpan DepartureTime { get; private set; }
 
-    public string GuestName { get; private set; }
-    public string GuestPhoneNumber { get; private set; }
+    public string GuestName { get; private set; } = null!;
+    public string GuestPhoneNumber { get; private set; } = null!;
 
     public int Guests { get; private set; }
 
     public decimal Total { get; private set; }
-    public string Currency { get; private set; }
+    public string Currency { get; private set; } = null!;
 
     public bool IsCanceled { get; private set; }
 

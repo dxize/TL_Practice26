@@ -2,6 +2,6 @@ namespace WebApi.Dto;
 
 public class SearchResultResponse
 {
-    public PropertyResponse Property { get; set; }
-    public List<RoomTypeResponse> AvailableRoomTypes { get; set; }
+    public required PropertyResponse Property { get; set; }
+    public required List<RoomTypeResponse> AvailableRoomTypes { get; set; }
 }

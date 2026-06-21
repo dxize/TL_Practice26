@@ -21,7 +21,7 @@ public class ReservationService
 
     public IReadOnlyList<Reservation> GetAll(
         int? propertyId = null,
-        string guestName = null,
+        string? guestName = null,
         DateTime? dateFrom = null,
         DateTime? dateTo = null )
     {
@@ -30,7 +30,7 @@ public class ReservationService
 
     public Reservation GetById( int id )
     {
-        Reservation reservation = _reservationRepository.GetById( id );
+        Reservation? reservation = _reservationRepository.GetById( id );
         if ( reservation is null )
         {
             throw new KeyNotFoundException( $"Reservation with id {id} not found." );
@@ -55,13 +55,13 @@ public class ReservationService
             throw new ArgumentException( "Дата заезда должна быть раньше даты выезда." );
         }
 
-        Property property = _propertyRepository.GetById( propertyId );
+        Property? property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {
             throw new ArgumentException( "Объект размещения не найден." );
         }
 
-        RoomType roomType = _roomTypeRepository.GetById( roomTypeId );
+        RoomType? roomType = _roomTypeRepository.GetById( roomTypeId );
         if ( roomType is null )
         {
             throw new ArgumentException( "Категория номера не найдена." );

@@ -18,7 +18,7 @@ public class RoomTypeService
 
     public IReadOnlyList<RoomType> GetByPropertyId( int propertyId )
     {
-        Property property = _propertyRepository.GetById( propertyId );
+        Property? property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {
             throw new KeyNotFoundException( $"Property with id {propertyId} not found." );
@@ -29,7 +29,7 @@ public class RoomTypeService
 
     public RoomType GetById( int id )
     {
-        RoomType roomType = _roomTypeRepository.GetById( id );
+        RoomType? roomType = _roomTypeRepository.GetById( id );
         if ( roomType is null )
         {
             throw new KeyNotFoundException( $"RoomType with id {id} not found." );
@@ -40,7 +40,7 @@ public class RoomTypeService
 
     public RoomType Create( int propertyId, string name, decimal dailyPrice, string currency, int minPersonCount, int maxPersonCount, int totalRooms, string services, string amenities )
     {
-        Property property = _propertyRepository.GetById( propertyId );
+        Property? property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {
             throw new KeyNotFoundException( $"Property with id {propertyId} not found." );

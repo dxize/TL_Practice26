@@ -9,10 +9,10 @@ public class ReservationResponse
     public DateTime DepartureDate { get; set; }
     public TimeSpan ArrivalTime { get; set; }
     public TimeSpan DepartureTime { get; set; }
-    public string GuestName { get; set; }
-    public string GuestPhoneNumber { get; set; }
+    public required string GuestName { get; set; }
+    public required string GuestPhoneNumber { get; set; }
     public int Guests { get; set; }
     public decimal Total { get; set; }
-    public string Currency { get; set; }
+    public required string Currency { get; set; }
     public bool IsCanceled { get; set; }
 }

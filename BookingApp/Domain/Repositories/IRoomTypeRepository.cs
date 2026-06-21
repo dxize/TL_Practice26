@@ -8,7 +8,7 @@ public interface IRoomTypeRepository
 
     IReadOnlyList<RoomType> GetRoomTypesByPropertyId( int propertyId, int? guests = null, decimal? maxPrice = null );
 
-    RoomType GetById( int id );
+    RoomType? GetById( int id );
 
     void Save( RoomType roomType );
 

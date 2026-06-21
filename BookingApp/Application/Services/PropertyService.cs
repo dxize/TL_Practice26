@@ -19,7 +19,7 @@ public class PropertyService
 
     public Property GetById( int id )
     {
-        Property property = _propertyRepository.GetById( id );
+        Property? property = _propertyRepository.GetById( id );
         if ( property is null )
         {
             throw new KeyNotFoundException( $"Property with id {id} not found." );

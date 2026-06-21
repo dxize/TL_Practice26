@@ -36,7 +36,7 @@ public class EfRoomTypeRepository : IRoomTypeRepository
         return query.ToList();
     }
 
-    public RoomType GetById( int id )
+    public RoomType? GetById( int id )
     {
         return _dbContext.Set<RoomType>().FirstOrDefault( roomType => roomType.Id == id );
     }

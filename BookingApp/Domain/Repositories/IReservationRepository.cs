@@ -6,11 +6,11 @@ public interface IReservationRepository
 {
     IReadOnlyList<Reservation> GetAll(
         int? propertyId = null,
-        string guestName = null,
+        string? guestName = null,
         DateTime? dateFrom = null,
         DateTime? dateTo = null );
 
-    Reservation GetById( int id );
+    Reservation? GetById( int id );
 
     IReadOnlyList<Reservation> GetActiveReservationsByRoomTypeAndDates(
         int roomTypeId,

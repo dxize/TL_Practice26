@@ -12,7 +12,7 @@ public class EfPropertyRepository : IPropertyRepository
         _dbContext = dbContext;
     }
 
-    public IReadOnlyList<Property> GetAll( string city = null )
+    public IReadOnlyList<Property> GetAll( string? city = null )
     {
         IQueryable<Property> query = _dbContext.Set<Property>().AsQueryable();
 
@@ -24,7 +24,7 @@ public class EfPropertyRepository : IPropertyRepository
         return query.ToList();
     }
 
-    public Property GetById( int id )
+    public Property? GetById( int id )
     {
         return _dbContext.Set<Property>().FirstOrDefault( property => property.Id == id );
     }

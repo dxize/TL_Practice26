@@ -14,7 +14,7 @@ public class EfReservationRepository : IReservationRepository
 
     public IReadOnlyList<Reservation> GetAll(
         int? propertyId = null,
-        string guestName = null,
+        string? guestName = null,
         DateTime? dateFrom = null,
         DateTime? dateTo = null )
     {
@@ -43,7 +43,7 @@ public class EfReservationRepository : IReservationRepository
         return query.ToList();
     }
 
-    public Reservation GetById( int id )
+    public Reservation? GetById( int id )
     {
         return _dbContext.Set<Reservation>().FirstOrDefault( reservation => reservation.Id == id );
     }

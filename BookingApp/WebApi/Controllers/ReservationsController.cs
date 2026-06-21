@@ -19,7 +19,7 @@ public class ReservationsController : ControllerBase
     [HttpGet( "" )]
     public IActionResult GetReservations(
         [FromQuery] int? propertyId = null,
-        [FromQuery] string guestName = null,
+        [FromQuery] string? guestName = null,
         [FromQuery] DateTime? dateFrom = null,
         [FromQuery] DateTime? dateTo = null )
     {
