@@ -26,6 +26,11 @@ public class SearchService
         int guests,
         decimal? maxPrice )
     {
+        if ( arrivalDate >= departureDate )
+        {
+            throw new ArgumentException( "Дата заезда должна быть раньше даты выезда." );
+        }
+
         IReadOnlyList<Property> properties = _propertyRepository.GetAll( city );
 
         List<SearchResult> results = new();

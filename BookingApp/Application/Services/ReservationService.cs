@@ -50,6 +50,11 @@ public class ReservationService
         string guestPhoneNumber,
         int guests )
     {
+        if ( arrivalDate >= departureDate )
+        {
+            throw new ArgumentException( "Дата заезда должна быть раньше даты выезда." );
+        }
+
         Property property = _propertyRepository.GetById( propertyId );
         if ( property is null )
         {

@@ -24,17 +24,19 @@ public class SearchController : ControllerBase
         [FromQuery] int guests,
         [FromQuery] decimal? maxPrice )
     {
-        if ( arrivalDate >= departureDate )
+        try
         {
-            return BadRequest( "Дата заезда должна быть раньше даты выезда." );
+            IReadOnlyList<SearchResult> searchResults = _searchService.Search(
+                city, arrivalDate, departureDate, guests, maxPrice );
+
+            List<SearchResultResponse> response = searchResults.Select( MapToResponse ).ToList();
+
+            return Ok( response );
         }
-
-        IReadOnlyList<SearchResult> searchResults = _searchService.Search(
-            city, arrivalDate, departureDate, guests, maxPrice );
-
-        List<SearchResultResponse> response = searchResults.Select( MapToResponse ).ToList();
-
-        return Ok( response );
+        catch ( ArgumentException ex )
+        {
+            return BadRequest( ex.Message );
+        }
     }
 
     private static SearchResultResponse MapToResponse( SearchResult result )

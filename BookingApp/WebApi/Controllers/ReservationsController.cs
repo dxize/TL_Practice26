@@ -51,11 +51,6 @@ public class ReservationsController : ControllerBase
     [HttpPost( "" )]
     public IActionResult CreateReservation( [FromBody] CreateReservationRequest request )
     {
-        if ( request.ArrivalDate >= request.DepartureDate )
-        {
-            return BadRequest( "Дата заезда должна быть раньше даты выезда." );
-        }
-
         try
         {
             _reservationService.Create(
