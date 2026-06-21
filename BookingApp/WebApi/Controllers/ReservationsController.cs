@@ -18,10 +18,10 @@ public class ReservationsController : ControllerBase
 
     [HttpGet( "" )]
     public IActionResult GetReservations(
-        [FromQuery] int? propertyId,
-        [FromQuery] string guestName,
-        [FromQuery] DateTime? dateFrom,
-        [FromQuery] DateTime? dateTo )
+        [FromQuery] int? propertyId = null,
+        [FromQuery] string guestName = null,
+        [FromQuery] DateTime? dateFrom = null,
+        [FromQuery] DateTime? dateTo = null )
     {
         IReadOnlyList<Reservation> reservations = _reservationService.GetAll(
             propertyId, guestName, dateFrom, dateTo );

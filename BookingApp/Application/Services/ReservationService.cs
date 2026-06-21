@@ -20,10 +20,10 @@ public class ReservationService
     }
 
     public IReadOnlyList<Reservation> GetAll(
-        int? propertyId,
-        string guestName,
-        DateTime? dateFrom,
-        DateTime? dateTo )
+        int? propertyId = null,
+        string guestName = null,
+        DateTime? dateFrom = null,
+        DateTime? dateTo = null )
     {
         return _reservationRepository.GetAll( propertyId, guestName, dateFrom, dateTo );
     }
