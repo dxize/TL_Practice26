@@ -41,13 +41,12 @@ describe("usePriceChart", () => {
 
         const { result } = renderHook(() => usePriceChart("CAD", "PLN", 5));
 
-        expect(result.current.chartLoading).toBe(true);
+        expect(result.current.chartData).toHaveLength(0);
 
         await act(async () => {
             await vi.advanceTimersByTimeAsync(0);
         });
 
-        expect(result.current.chartLoading).toBe(false);
         expect(result.current.chartData).toEqual(mockData);
         expect(result.current.latestPrice).toEqual(mockData[1]);
         expect(result.current.chartError).toBeNull();
@@ -57,7 +56,7 @@ describe("usePriceChart", () => {
         const { result } = renderHook(() => usePriceChart("", "", 5));
 
         expect(apiClient.fetchPriceHistory).not.toHaveBeenCalled();
-        expect(result.current.chartLoading).toBe(true);
+        expect(result.current.chartData).toHaveLength(0);
     });
 
     test("auto-refreshes data by timer", async () => {
@@ -69,7 +68,7 @@ describe("usePriceChart", () => {
             await vi.advanceTimersByTimeAsync(0);
         });
 
-        expect(result.current.chartLoading).toBe(false);
+        expect(result.current.chartData).toEqual(mockData);
         expect(apiClient.fetchPriceHistory).toHaveBeenCalledTimes(1);
 
         const updatedData: PriceChange[] = [
@@ -103,7 +102,7 @@ describe("usePriceChart", () => {
             await vi.advanceTimersByTimeAsync(0);
         });
 
-        expect(result.current.chartLoading).toBe(false);
+        expect(result.current.chartData).toEqual(mockData);
 
         const newData: PriceChange[] = [
             {
@@ -136,7 +135,7 @@ describe("usePriceChart", () => {
             await vi.advanceTimersByTimeAsync(0);
         });
 
-        expect(result.current.chartLoading).toBe(false);
+        expect(result.current.chartData).toEqual(mockData);
 
         vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue([mockData[0]]);
 
@@ -152,13 +151,11 @@ describe("usePriceChart", () => {
     test("clears interval on unmount", async () => {
         vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockData);
 
-        const { result, unmount } = renderHook(() => usePriceChart("CAD", "PLN", 5));
+        const { unmount } = renderHook(() => usePriceChart("CAD", "PLN", 5));
 
         await act(async () => {
             await vi.advanceTimersByTimeAsync(0);
         });
-
-        expect(result.current.chartLoading).toBe(false);
 
         unmount();
 
@@ -182,7 +179,6 @@ describe("usePriceChart", () => {
             await vi.advanceTimersByTimeAsync(0);
         });
 
-        expect(result.current.chartLoading).toBe(false);
         expect(result.current.chartError).toBe("Network Error");
         expect(result.current.chartData).toEqual([]);
     });
@@ -219,7 +215,6 @@ describe("usePriceChart", () => {
             await vi.advanceTimersByTimeAsync(0);
         });
 
-        expect(result.current.chartLoading).toBe(false);
         expect(result.current.chartData).toEqual([]);
         expect(result.current.latestPrice).toBeNull();
         expect(result.current.chartError).toBeNull();

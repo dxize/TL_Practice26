@@ -10,7 +10,6 @@ export const usePriceChart = (
     periodMinutes: number
 ) => {
     const [chartData, setChartData] = useState<PriceChange[]>([]);
-    const [chartLoading, setChartLoading] = useState(true);
     const [chartError, setChartError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -18,15 +17,12 @@ export const usePriceChart = (
             return;
         }
 
+        setChartData([]);
+        setChartError(null);
+
         const controller = new AbortController();
-        let isFirstLoad = true;
 
         const loadPrices = async () => {
-            if (isFirstLoad) {
-                setChartLoading(true);
-                setChartError(null);
-            }
-
             try {
                 const data = await fetchPriceHistory(
                     fromCode,
@@ -37,9 +33,7 @@ export const usePriceChart = (
 
                 if (!controller.signal.aborted) {
                     setChartData(data);
-                    setChartLoading(false);
                     setChartError(null);
-                    isFirstLoad = false;
                 }
             } catch (err: unknown) {
                 if (controller.signal.aborted) {
@@ -49,13 +43,7 @@ export const usePriceChart = (
                 const message =
                     err instanceof Error ? err.message : "Unknown error";
 
-                if (isFirstLoad) {
-                    setChartData([]);
-                    setChartLoading(false);
-                    setChartError(message);
-                } else {
-                    setChartError(message);
-                }
+                setChartError(message);
             }
         };
 
@@ -78,8 +66,8 @@ export const usePriceChart = (
 
     return {
         chartData,
-        chartLoading,
         chartError,
         latestPrice,
     };
 };
+

@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest';
-import { converterReducer, initialState, type ConverterState } from './useConverter';
+import { converterReducer, initialState, type ConverterState } from './converterReducer';
 import type { Currency } from '../models';
 
 describe('converterReducer', () => {
