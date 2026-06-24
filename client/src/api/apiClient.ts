@@ -7,9 +7,14 @@ import { mapPriceChangeDtoToModel } from "./mappers/priceChangeMapper";
 const API_BASE_URL = "http://localhost:5081";
 const MS_PER_MINUTE = 60_000;
 
+export type Result<TData> = {
+    result: TData;
+    errorMessage: string;
+};
+
 export const fetchCurrencies = async (
     signal?: AbortSignal
-): Promise<Currency[]> => {
+): Promise<Result<Currency[]>> => {
     const response = await fetch(`${API_BASE_URL}/Currency`, { signal });
 
     if (!response.ok) {
@@ -21,11 +26,11 @@ export const fetchCurrencies = async (
             }
         } catch {
         }
-        throw new Error(errorMessage);
+        return { result: [], errorMessage };
     }
 
     const dtos: CurrencyDto[] = await response.json();
-    return dtos.map(mapCurrencyDtoToModel);
+    return { result: dtos.map(mapCurrencyDtoToModel), errorMessage: "" };
 };
 
 export const fetchPriceHistory = async (
@@ -33,7 +38,7 @@ export const fetchPriceHistory = async (
     toCurrencyCode: string,
     periodMinutes: number,
     signal?: AbortSignal
-): Promise<PriceChange[]> => {
+): Promise<Result<PriceChange[]>> => {
     const now = new Date();
     const from = new Date(now.getTime() - periodMinutes * MS_PER_MINUTE);
     const fromDateTime = encodeURIComponent(from.toISOString());
@@ -52,9 +57,9 @@ export const fetchPriceHistory = async (
             }
         } catch {
         }
-        throw new Error(errorMessage);
+        return { result: [], errorMessage };
     }
 
     const dtos: PriceChangeDto[] = await response.json();
-    return dtos.map(mapPriceChangeDtoToModel);
+    return { result: dtos.map(mapPriceChangeDtoToModel), errorMessage: "" };
 };

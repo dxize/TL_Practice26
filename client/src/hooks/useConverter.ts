@@ -16,16 +16,14 @@ export const useConverter = () => {
 
         const loadCurrencies = async () => {
             dispatch({ type: "FETCH_CURRENCIES_START" });
-            try {
-                const data = await fetchCurrencies(controller.signal);
-                if (!controller.signal.aborted) {
-                    dispatch({ type: "FETCH_CURRENCIES_SUCCESS", payload: data });
-                }
-            } catch (err: unknown) {
-                if (!controller.signal.aborted) {
-                    const message = err instanceof Error ? err.message : "Unknown error";
-                    dispatch({ type: "FETCH_CURRENCIES_ERROR", payload: message });
-                }
+            const { result, errorMessage } = await fetchCurrencies(controller.signal);
+            if (controller.signal.aborted) {
+                return;
+            }
+            if (errorMessage) {
+                dispatch({ type: "FETCH_CURRENCIES_ERROR", payload: errorMessage });
+            } else {
+                dispatch({ type: "FETCH_CURRENCIES_SUCCESS", payload: result });
             }
         };
 

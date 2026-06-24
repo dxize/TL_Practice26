@@ -23,27 +23,22 @@ export const usePriceChart = (
         const controller = new AbortController();
 
         const loadPrices = async () => {
-            try {
-                const data = await fetchPriceHistory(
-                    fromCode,
-                    toCode,
-                    periodMinutes,
-                    controller.signal
-                );
+            const { result, errorMessage } = await fetchPriceHistory(
+                fromCode,
+                toCode,
+                periodMinutes,
+                controller.signal
+            );
 
-                if (!controller.signal.aborted) {
-                    setChartData(data);
-                    setChartError(null);
-                }
-            } catch (err: unknown) {
-                if (controller.signal.aborted) {
-                    return;
-                }
+            if (controller.signal.aborted) {
+                return;
+            }
 
-                const message =
-                    err instanceof Error ? err.message : "Unknown error";
-
-                setChartError(message);
+            if (errorMessage) {
+                setChartError(errorMessage);
+            } else {
+                setChartData(result);
+                setChartError(null);
             }
         };
 
