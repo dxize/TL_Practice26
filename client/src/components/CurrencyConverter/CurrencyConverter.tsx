@@ -1,4 +1,5 @@
-import { useConverter } from "../../hooks/useConverter";
+import type { Currency } from "../../models";
+import { useConverter } from "./useConverter";
 
 import { HeaderCurrencyConverter } from "./components/HeaderCurrencyConverter/HeaderCurrencyConverter";
 import { InputCurrencyCoverter } from "./components/InputCurrencyCoverter/InputCurrencyCoverter";
@@ -7,9 +8,13 @@ import { RateChart } from "./components/RateChart/RateChart";
 import { MoreAboutCurrency } from "./components/MoreAboutCurrency/MoreAboutCurrency";
 import styles from "./CurrencyConverter.module.scss";
 
-export const CurrencyConverter = () => {
+type Props = {
+    currencies: Currency[];
+};
+
+export const CurrencyConverter = ({ currencies }: Props) => {
     const {
-        state: { amount, fromCode, toCode, currencies, isLoading, error },
+        state: { amount, fromCode, toCode },
         result,
         pairKey,
         fromCurrency,
@@ -24,19 +29,7 @@ export const CurrencyConverter = () => {
         chartError,
         periodMinutes,
         setPeriodMinutes,
-    } = useConverter();
-
-    if (isLoading && currencies.length === 0) {
-        return <div className={styles.loader}>Loading...</div>;
-    }
-
-    if (error) {
-        return (
-            <div className={styles.errorCard}>
-                COULD NOT GET DATA<br />FROM THE SERVER.
-            </div>
-        );
-    }
+    } = useConverter(currencies);
 
     return (
         <div className={styles.body}>

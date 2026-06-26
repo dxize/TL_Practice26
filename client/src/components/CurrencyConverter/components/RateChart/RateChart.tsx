@@ -23,6 +23,10 @@ const formatTime = (dateTime: string): string => {
     return date.toLocaleTimeString("en-GB", { timeZone: "UTC" });
 };
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+const PERIODS_MINUTES = [5, 4, 3, 2, 1];
+/* eslint-enable @typescript-eslint/no-magic-numbers */
+
 export const RateChart = ({
     chartData,
     chartLoading,
@@ -30,12 +34,10 @@ export const RateChart = ({
     periodMinutes,
     onPeriodChange,
 }: RateChartProps) => {
-    const periods = [5, 4, 3, 2, 1];
-
     return (
         <div className={styles.container}>
             <div className={styles.periodSwitcher}>
-                {periods.map((p) => (
+                {PERIODS_MINUTES.map((p) => (
                     <button
                         key={p}
                         type="button"

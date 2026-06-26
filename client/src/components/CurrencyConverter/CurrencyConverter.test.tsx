@@ -16,8 +16,10 @@ vi.mock("recharts", async (importOriginal) => {
 });
 
 vi.mock("../../api/apiClient", () => ({
-    fetchCurrencies: vi.fn(),
-    fetchPriceHistory: vi.fn(),
+    ApiClient: {
+        fetchCurrencies: vi.fn(),
+        fetchPriceHistory: vi.fn(),
+    },
 }));
 
 const mockCurrencies: Currency[] = [
@@ -46,45 +48,27 @@ describe("CurrencyConverter UI States", () => {
         vi.clearAllMocks();
     });
 
-    test("shows loading state initially", () => {
-        vi.mocked(apiClient.fetchCurrencies).mockReturnValue(new Promise(() => { }));
-
-        render(<CurrencyConverter />);
-
-        expect(screen.getByText(/loading/i)).toBeInTheDocument();
-    });
-
-    test("shows error card if fetchCurrencies fails", async () => {
-        vi.mocked(apiClient.fetchCurrencies).mockRejectedValue(new Error("Network Error"));
-
-        render(<CurrencyConverter />);
-
-        await waitFor(() => {
-            expect(screen.getByText(/COULD NOT GET DATA/i)).toBeInTheDocument();
-        });
-    });
-
     test("shows success state and elements after data load", async () => {
-        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockPriceHistory);
-
-        render(<CurrencyConverter />);
-
-        await waitFor(() => {
-            expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+        vi.mocked(apiClient.ApiClient.fetchPriceHistory).mockResolvedValue({
+            result: mockPriceHistory,
+            errorMessage: "",
         });
 
-        const selects = screen.getAllByRole("combobox");
-        expect(selects).toHaveLength(2);
+        render(<CurrencyConverter currencies={mockCurrencies} />);
+
+        await waitFor(() => {
+            const selects = screen.getAllByRole("combobox");
+            expect(selects).toHaveLength(2);
+        });
     });
 
     test("shows chart error if fetchPriceHistory fails on first load", async () => {
-        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceHistory).mockRejectedValue(
-            new Error("Failed to fetch price history")
-        );
+        vi.mocked(apiClient.ApiClient.fetchPriceHistory).mockResolvedValue({
+            result: [],
+            errorMessage: "Failed to fetch price history",
+        });
 
-        render(<CurrencyConverter />);
+        render(<CurrencyConverter currencies={mockCurrencies} />);
 
         await waitFor(() => {
             expect(screen.getByText("Failed to fetch price history")).toBeInTheDocument();
@@ -92,14 +76,17 @@ describe("CurrencyConverter UI States", () => {
     });
 
     test("calculates result when user types amount", async () => {
-        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockPriceHistory);
+        vi.mocked(apiClient.ApiClient.fetchPriceHistory).mockResolvedValue({
+            result: mockPriceHistory,
+            errorMessage: "",
+        });
         const user = userEvent.setup();
 
-        render(<CurrencyConverter />);
+        render(<CurrencyConverter currencies={mockCurrencies} />);
 
         await waitFor(() => {
-            expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+            const inputs = screen.getAllByRole("textbox");
+            expect(inputs[1]).toHaveValue("2.95");
         });
 
         const inputs = screen.getAllByRole("textbox");
@@ -114,16 +101,17 @@ describe("CurrencyConverter UI States", () => {
     });
 
     test("shows period switcher buttons", async () => {
-        vi.mocked(apiClient.fetchCurrencies).mockResolvedValue(mockCurrencies);
-        vi.mocked(apiClient.fetchPriceHistory).mockResolvedValue(mockPriceHistory);
-
-        render(<CurrencyConverter />);
-
-        await waitFor(() => {
-            expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+        vi.mocked(apiClient.ApiClient.fetchPriceHistory).mockResolvedValue({
+            result: mockPriceHistory,
+            errorMessage: "",
         });
 
-        expect(screen.getByText("5 MIN")).toBeInTheDocument();
+        render(<CurrencyConverter currencies={mockCurrencies} />);
+
+        await waitFor(() => {
+            expect(screen.getByText("5 MIN")).toBeInTheDocument();
+        });
+
         expect(screen.getByText("4 MIN")).toBeInTheDocument();
         expect(screen.getByText("3 MIN")).toBeInTheDocument();
         expect(screen.getByText("2 MIN")).toBeInTheDocument();
