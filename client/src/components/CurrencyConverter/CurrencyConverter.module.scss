@@ -5,6 +5,7 @@
 
     inline-size: 100%;
     max-inline-size: 1257px;
+    padding-block-end: clamp(16px, 2vw, 30px);
 
     background-color: #FFF;
     border-radius: 30px;
@@ -23,6 +24,27 @@
 .inputsColumn {
     display: flex;
     flex-direction: column;
-    inline-size: 50%;
+
+    inline-size: 35%;
+
     gap: 16px;
+}
+
+.chartColumn {
+    flex: 1;
+
+    min-inline-size: 0;
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4757;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+    z-index: 1000;
 }

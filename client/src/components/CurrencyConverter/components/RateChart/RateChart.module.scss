@@ -1,0 +1,71 @@
+.container {
+    display: flex;
+    flex-direction: column;
+
+    inline-size: 100%;
+}
+
+.periodSwitcher {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+
+    margin-block-end: 8px;
+}
+
+.periodButton {
+    padding: 4px 10px;
+
+    background: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 14px;
+
+    color: #767676;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.periodButton:hover {
+    border-color: #1a73e8;
+
+    color: #1a73e8;
+}
+
+.periodButtonActive {
+    border-color: transparent;
+
+    color: #1a73e8;
+    font-weight: 600;
+}
+
+.chartArea {
+    min-block-size: 200px;
+}
+
+.placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    block-size: 200px;
+
+    color: #999;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+}
+
+.autoRefreshError {
+    margin-block-start: 6px;
+    padding: 6px 12px;
+
+    background-color: #fff3cd;
+    border-radius: 6px;
+
+    color: #856404;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
